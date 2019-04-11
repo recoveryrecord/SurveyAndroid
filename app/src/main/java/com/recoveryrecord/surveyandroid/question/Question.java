@@ -2,11 +2,26 @@ package com.recoveryrecord.surveyandroid.question;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonSubTypes;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
 import java.util.ArrayList;
 
-@JsonIgnoreProperties(ignoreUnknown = true)
-public class Question {
+@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "question_type")
+@JsonSubTypes({
+        @JsonSubTypes.Type(value = SingleSelectQuestion.class, name = "single_select"),
+        @JsonSubTypes.Type(value = MultiSelectQuestion.class, name = "multi_select"),
+        @JsonSubTypes.Type(value = YearPickerQuestion.class, name = "year_picker"),
+        @JsonSubTypes.Type(value = DatePickerQuestion.class, name = "date_picker"),
+        @JsonSubTypes.Type(value = SingleTextFieldQuestion.class, name = "single_text_field"),
+        @JsonSubTypes.Type(value = MultiTextFieldQuestion.class, name = "multi_text_field"),
+        @JsonSubTypes.Type(value = DynamicLabelTextFieldQuestion.class, name = "dynamic_label_text_field"),
+        @JsonSubTypes.Type(value = AddTextFieldQuestion.class, name = "add_text_field"),
+        @JsonSubTypes.Type(value = SegmentSelectQuestionType.class, name = "segment_select"),
+        @JsonSubTypes.Type(value = TableSelectQuestion.class, name = "table_select")
+})
+public abstract class Question {
 
     public String id;
     public String header;
