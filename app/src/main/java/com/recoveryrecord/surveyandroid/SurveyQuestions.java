@@ -48,4 +48,8 @@ public class SurveyQuestions {
         mContext = context;
         mQuestions = questions;
     }
+
+    public Question getQuestionFor(int position) {
+        return mQuestions.get(position);
+    }
 }

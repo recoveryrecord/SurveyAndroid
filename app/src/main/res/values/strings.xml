@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">SurveyAndroid</string>
+    <string name="example_survey">Example Survey</string>
 </resources>

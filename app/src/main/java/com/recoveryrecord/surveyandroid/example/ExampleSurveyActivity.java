@@ -10,6 +10,15 @@ public class ExampleSurveyActivity extends SurveyActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_example_survey);
+    }
+
+    @Override
+    protected String getSurveyTitle() {
+        return getString(R.string.example_survey);
+    }
+
+    @Override
+    protected String getJsonFilename() {
+        return "ExampleQuestions.json";
     }
 }

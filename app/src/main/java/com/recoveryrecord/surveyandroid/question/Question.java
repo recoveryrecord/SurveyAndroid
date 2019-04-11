@@ -1,14 +1,12 @@
 package com.recoveryrecord.surveyandroid.question;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
 import java.util.ArrayList;
 
-@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "question_type")
+@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "question_type", visible = true)
 @JsonSubTypes({
         @JsonSubTypes.Type(value = SingleSelectQuestion.class, name = "single_select"),
         @JsonSubTypes.Type(value = MultiSelectQuestion.class, name = "multi_select"),
