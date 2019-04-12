@@ -52,4 +52,8 @@ public class SurveyQuestions {
     public Question getQuestionFor(int position) {
         return mQuestions.get(position);
     }
+
+    public int size() {
+        return mQuestions.size();
+    }
 }

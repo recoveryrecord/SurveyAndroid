@@ -86,25 +86,25 @@ public class SurveyQuestionAdapter extends RecyclerView.Adapter<QuestionViewHold
         View view = LayoutInflater.from(getContext()).inflate(getLayout(questionType), viewGroup, false);
         switch (questionType) {
             case SINGLE_SELECT:
-                return new SingleSelectQuestionViewHolder(view);
+                return new SingleSelectQuestionViewHolder(getContext(), view);
             case MULTI_SELECT:
-                return new MultiSelectQuestionViewHolder(view);
+                return new MultiSelectQuestionViewHolder(getContext(), view);
             case YEAR_PICKER:
-                return new YearPickerQuestionViewHolder(view);
+                return new YearPickerQuestionViewHolder(getContext(), view);
             case DATE_PICKER:
-                return new DatePickerQuestionViewHolder(view);
+                return new DatePickerQuestionViewHolder(getContext(), view);
             case SINGLE_TEXT_FIELD:
-                return new SingleTextFieldQuestionViewHolder(view);
+                return new SingleTextFieldQuestionViewHolder(getContext(), view);
             case MULTI_TEXT_FIELD:
-                return new MultiTextFieldQuestionViewHolder(view);
+                return new MultiTextFieldQuestionViewHolder(getContext(), view);
             case DYNAMIC_LABEL_TEXT_FIELD:
-                return new DynamicLabelTextFieldQuestionViewHolder(view);
+                return new DynamicLabelTextFieldQuestionViewHolder(getContext(), view);
             case ADD_TEXT_FIELD:
-                return new AddTextFieldQuestionViewHolder(view);
+                return new AddTextFieldQuestionViewHolder(getContext(), view);
             case SEGMENT_SELECT:
-                return new SegmentSelectQuestionViewHolder(view);
+                return new SegmentSelectQuestionViewHolder(getContext(), view);
             case TABLE_SELECT:
-                return new TableSelectQuestionViewHolder(view);
+                return new TableSelectQuestionViewHolder(getContext(), view);
         }
         return null;
     }

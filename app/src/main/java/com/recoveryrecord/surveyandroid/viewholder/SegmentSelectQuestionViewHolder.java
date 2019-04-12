@@ -1,5 +1,6 @@
 package com.recoveryrecord.surveyandroid.viewholder;
 
+import android.content.Context;
 import android.support.annotation.NonNull;
 import android.view.View;
 
@@ -7,8 +8,8 @@ import com.recoveryrecord.surveyandroid.question.SegmentSelectQuestion;
 
 public class SegmentSelectQuestionViewHolder extends QuestionViewHolder<SegmentSelectQuestion> {
 
-    public SegmentSelectQuestionViewHolder(@NonNull View itemView) {
-        super(itemView);
+    public SegmentSelectQuestionViewHolder(Context context, @NonNull View itemView) {
+        super(context, itemView);
     }
 
     @Override

@@ -13,7 +13,8 @@ public class SurveyQuestionsState {
     }
 
     public Integer getVisibleQuestionCount() {
-        return mVisibleQuestionCount;
+        //return mVisibleQuestionCount;
+        return mSurveyQuestions.size();
     }
 
     public Question getQuestionFor(int position) {
