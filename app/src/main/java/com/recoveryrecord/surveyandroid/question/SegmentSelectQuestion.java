@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.ArrayList;
 
-public class SegmentSelectQuestionType extends Question {
+public class SegmentSelectQuestion extends Question {
 
     public ArrayList<String> values;
 

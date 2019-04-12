@@ -16,7 +16,7 @@ import java.util.ArrayList;
         @JsonSubTypes.Type(value = MultiTextFieldQuestion.class, name = "multi_text_field"),
         @JsonSubTypes.Type(value = DynamicLabelTextFieldQuestion.class, name = "dynamic_label_text_field"),
         @JsonSubTypes.Type(value = AddTextFieldQuestion.class, name = "add_text_field"),
-        @JsonSubTypes.Type(value = SegmentSelectQuestionType.class, name = "segment_select"),
+        @JsonSubTypes.Type(value = SegmentSelectQuestion.class, name = "segment_select"),
         @JsonSubTypes.Type(value = TableSelectQuestion.class, name = "table_select")
 })
 public abstract class Question {

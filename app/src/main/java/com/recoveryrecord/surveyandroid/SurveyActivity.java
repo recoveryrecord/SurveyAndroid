@@ -28,7 +28,7 @@ public abstract class SurveyActivity extends AppCompatActivity {
         recyclerView = findViewById(R.id.recycler_view);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         SurveyQuestionsState state = new SurveyQuestionsState(surveyQuestions);
-        mAdapter = new SurveyQuestionAdapter(state);
+        mAdapter = new SurveyQuestionAdapter(this, state);
         recyclerView.setAdapter(mAdapter);
     }
 
