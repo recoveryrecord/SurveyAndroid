@@ -34,15 +34,22 @@
             tools:text="What is your favorite ice cream flavor?"
             />
 
-        <EditText
-            android:id="@+id/area_text"
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/answer_input_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:layout_marginBottom="10dp"
-            android:lines="4"
-            android:inputType="textMultiLine|textCapSentences|textAutoCorrect"
-            />
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+
+            <android.support.design.widget.TextInputEditText
+                android:id="@+id/answer_edit"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:lines="4"
+                android:inputType="textMultiLine|textCapSentences|textAutoCorrect"
+                android:gravity="top|start"
+                />
+
+        </android.support.design.widget.TextInputLayout>
 
         <Button
             android:id="@+id/next_button"
