@@ -16,6 +16,7 @@ import com.recoveryrecord.surveyandroid.question.MultiTextFieldQuestion;
 import com.recoveryrecord.surveyandroid.question.Question;
 import com.recoveryrecord.surveyandroid.question.SegmentSelectQuestion;
 import com.recoveryrecord.surveyandroid.question.SingleSelectQuestion;
+import com.recoveryrecord.surveyandroid.question.SingleTextAreaQuestion;
 import com.recoveryrecord.surveyandroid.question.SingleTextFieldQuestion;
 import com.recoveryrecord.surveyandroid.question.TableSelectQuestion;
 import com.recoveryrecord.surveyandroid.question.YearPickerQuestion;
@@ -27,6 +28,7 @@ import com.recoveryrecord.surveyandroid.viewholder.MultiTextFieldQuestionViewHol
 import com.recoveryrecord.surveyandroid.viewholder.QuestionViewHolder;
 import com.recoveryrecord.surveyandroid.viewholder.SegmentSelectQuestionViewHolder;
 import com.recoveryrecord.surveyandroid.viewholder.SingleSelectQuestionViewHolder;
+import com.recoveryrecord.surveyandroid.viewholder.SingleTextAreaQuestionViewHolder;
 import com.recoveryrecord.surveyandroid.viewholder.SingleTextFieldQuestionViewHolder;
 import com.recoveryrecord.surveyandroid.viewholder.TableSelectQuestionViewHolder;
 import com.recoveryrecord.surveyandroid.viewholder.YearPickerQuestionViewHolder;
@@ -42,6 +44,7 @@ public class SurveyQuestionAdapter extends RecyclerView.Adapter<QuestionViewHold
         YEAR_PICKER("year_picker"),
         DATE_PICKER("date_picker"),
         SINGLE_TEXT_FIELD("single_text_field"),
+        SINGLE_TEXT_AREA("single_text_area"),
         MULTI_TEXT_FIELD("multi_text_field"),
         DYNAMIC_LABEL_TEXT_FIELD("dynamic_label_text_field"),
         ADD_TEXT_FIELD("add_text_field"),
@@ -95,6 +98,8 @@ public class SurveyQuestionAdapter extends RecyclerView.Adapter<QuestionViewHold
                 return new DatePickerQuestionViewHolder(getContext(), view);
             case SINGLE_TEXT_FIELD:
                 return new SingleTextFieldQuestionViewHolder(getContext(), view);
+            case SINGLE_TEXT_AREA:
+                return new SingleTextAreaQuestionViewHolder(getContext(), view);
             case MULTI_TEXT_FIELD:
                 return new MultiTextFieldQuestionViewHolder(getContext(), view);
             case DYNAMIC_LABEL_TEXT_FIELD:
@@ -139,6 +144,10 @@ public class SurveyQuestionAdapter extends RecyclerView.Adapter<QuestionViewHold
                     ((SingleTextFieldQuestionViewHolder) questionViewHolder).bind((SingleTextFieldQuestion) question);
                 }
                 break;
+            case SINGLE_TEXT_AREA:
+                if (questionViewHolder instanceof SingleTextAreaQuestionViewHolder && question instanceof SingleTextAreaQuestion) {
+                    ((SingleTextAreaQuestionViewHolder) questionViewHolder).bind((SingleTextAreaQuestion) question);
+                }
             case MULTI_TEXT_FIELD:
                 if (questionViewHolder instanceof MultiTextFieldQuestionViewHolder && question instanceof MultiTextFieldQuestion) {
                     ((MultiTextFieldQuestionViewHolder) questionViewHolder).bind((MultiTextFieldQuestion) question);
@@ -178,6 +187,8 @@ public class SurveyQuestionAdapter extends RecyclerView.Adapter<QuestionViewHold
                 return R.layout.view_date_picker_question;
             case SINGLE_TEXT_FIELD:
                 return R.layout.view_single_text_field_question;
+            case SINGLE_TEXT_AREA:
+                return R.layout.view_single_text_area_question;
             case MULTI_TEXT_FIELD:
                 return R.layout.view_multi_text_field_question;
             case DYNAMIC_LABEL_TEXT_FIELD:

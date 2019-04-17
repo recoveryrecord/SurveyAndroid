@@ -13,6 +13,7 @@ import java.util.ArrayList;
         @JsonSubTypes.Type(value = YearPickerQuestion.class, name = "year_picker"),
         @JsonSubTypes.Type(value = DatePickerQuestion.class, name = "date_picker"),
         @JsonSubTypes.Type(value = SingleTextFieldQuestion.class, name = "single_text_field"),
+        @JsonSubTypes.Type(value = SingleTextAreaQuestion.class, name = "single_text_area"),
         @JsonSubTypes.Type(value = MultiTextFieldQuestion.class, name = "multi_text_field"),
         @JsonSubTypes.Type(value = DynamicLabelTextFieldQuestion.class, name = "dynamic_label_text_field"),
         @JsonSubTypes.Type(value = AddTextFieldQuestion.class, name = "add_text_field"),
