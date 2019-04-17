@@ -17,8 +17,7 @@ import com.recoveryrecord.surveyandroid.question.SingleSelectQuestion;
 
 public class SingleSelectQuestionViewHolder extends QuestionViewHolder<SingleSelectQuestion> {
 
-    private TextView headerText;
-    private TextView questionText;
+
     private RadioGroup answerSelector;
     private ViewGroup otherSection;
     private EditText editOther;
@@ -27,8 +26,6 @@ public class SingleSelectQuestionViewHolder extends QuestionViewHolder<SingleSel
     public SingleSelectQuestionViewHolder(Context context, @NonNull View itemView) {
         super(context, itemView);
 
-        headerText = itemView.findViewById(R.id.header_text);
-        questionText = itemView.findViewById(R.id.question_text);
         answerSelector = itemView.findViewById(R.id.answer_selector);
         otherSection = itemView.findViewById(R.id.other_section);
         editOther = itemView.findViewById(R.id.edit_other);
@@ -37,8 +34,7 @@ public class SingleSelectQuestionViewHolder extends QuestionViewHolder<SingleSel
 
     @Override
     public void bind(SingleSelectQuestion question) {
-        headerText.setText(question.header);
-        questionText.setText(question.question);
+        super.bind(question);
         for (Option option : question.options) {
             final RadioButton radioButton = new RadioButton(getContext());
             radioButton.setText(option.title);
@@ -53,5 +49,13 @@ public class SingleSelectQuestionViewHolder extends QuestionViewHolder<SingleSel
                 otherSection.setVisibility(checkedId == R.id.other_button ? View.VISIBLE : View.GONE);
             }
         });
+
+    }
+
+    @Override
+    protected void resetState() {
+        super.resetState();
+        answerSelector.removeAllViews();
+        editOther.setText(null);
     }
 }
