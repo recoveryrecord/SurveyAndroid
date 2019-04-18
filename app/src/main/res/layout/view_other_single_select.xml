@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/other_section"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -9,17 +10,30 @@
     android:orientation="horizontal"
     android:visibility="gone">
 
-    <EditText
-        android:id="@+id/edit_other"
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/answer_input_layout"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:hint="@string/please_specify" />
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:hint="@string/please_specify"
+        app:hintAnimationEnabled="true">
+
+        <android.support.design.widget.TextInputEditText
+            android:id="@+id/edit_other"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="text"
+            android:imeOptions="actionNext"
+            />
+
+    </android.support.design.widget.TextInputLayout>
 
     <Button
         android:id="@+id/next_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
         android:text="@string/next"
         style="@style/Base.Widget.AppCompat.Button.Borderless"
         />
