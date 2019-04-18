@@ -10,7 +10,11 @@
         "Chocolate",
         "Vanilla",
         {
-          "title": "Other",
+          "title": "Other flavor",
+          "type": "freeform"
+        },
+        {
+          "title": "Other dessert",
           "type": "freeform"
         }
       ]

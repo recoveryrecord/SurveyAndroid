@@ -1,4 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <item name="other_button" type="id" />
+    <item name="is_other" type="id" />
 </resources>
