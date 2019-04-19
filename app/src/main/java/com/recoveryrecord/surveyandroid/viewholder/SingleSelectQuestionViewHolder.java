@@ -108,6 +108,7 @@ public class SingleSelectQuestionViewHolder extends QuestionViewHolder<SingleSel
         if (editTextWatcher != null) {
             editOther.removeTextChangedListener(editTextWatcher);
         }
+        otherSection.setVisibility(View.GONE);
         editOther.setText(null);
         nextButton.setOnClickListener(null);
     }
