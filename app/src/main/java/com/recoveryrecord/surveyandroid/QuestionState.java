@@ -28,11 +28,19 @@ public class QuestionState {
         }
     }
 
+    public boolean containsKey(String key) {
+        return mQuestionData.containsKey(key);
+    }
+
     public void setAnswer(String answer) {
         mQuestionData.put(ANSWER_KEY, answer);
         if (mListener != null) {
             mListener.questionAnswered(this);
         }
+    }
+
+    public String get(String key) {
+        return mQuestionData.get(key);
     }
 
     public String answer() {
