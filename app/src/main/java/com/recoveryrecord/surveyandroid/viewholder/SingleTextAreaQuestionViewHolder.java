@@ -36,12 +36,12 @@ public class SingleTextAreaQuestionViewHolder extends QuestionViewHolder<SingleT
             answerInputLayout.setCounterEnabled(true);
             answerInputLayout.setCounterMaxLength(Integer.valueOf(singleTextAreaQuestion.maxChars));
         }
-        answerEdit.setText(questionState.get(EDIT_TEXT_KEY));
+        answerEdit.setText(questionState.getString(EDIT_TEXT_KEY));
         editTextWatcher = new SimpleTextWatcher() {
             @Override
             public void afterTextChanged(Editable s) {
                 questionState.put(EDIT_TEXT_KEY, s.toString());
-                if (questionState.get(ANSWER_ON_EDIT_UPDATE_KEY, false)) {
+                if (questionState.getBool(ANSWER_ON_EDIT_UPDATE_KEY, false)) {
                     questionState.setAnswer(s.toString());
                 }
             }

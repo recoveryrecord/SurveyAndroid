@@ -45,12 +45,12 @@ public class SingleTextFieldQuestionViewHolder extends QuestionViewHolder<Single
         if (question.input_type != null) {
             answerEdit.setInputType(question.input_type.equals("number") ? InputType.TYPE_CLASS_NUMBER : InputType.TYPE_CLASS_TEXT);
         }
-        answerEdit.setText(questionState.get(EDIT_TEXT_KEY));
+        answerEdit.setText(questionState.getString(EDIT_TEXT_KEY));
         editTextWatcher = new SimpleTextWatcher() {
             @Override
             public void afterTextChanged(Editable s) {
                 questionState.put(EDIT_TEXT_KEY, s.toString());
-                if (questionState.get(ANSWER_ON_EDIT_UPDATE_KEY, false)) {
+                if (questionState.getBool(ANSWER_ON_EDIT_UPDATE_KEY, false)) {
                     questionState.setAnswer(s.toString());
                 }
             }
