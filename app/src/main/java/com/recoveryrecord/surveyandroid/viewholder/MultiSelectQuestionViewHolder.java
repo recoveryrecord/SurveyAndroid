@@ -11,6 +11,7 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 
+import com.recoveryrecord.surveyandroid.QuestionState;
 import com.recoveryrecord.surveyandroid.R;
 import com.recoveryrecord.surveyandroid.question.MultiSelectQuestion;
 import com.recoveryrecord.surveyandroid.question.Option;
@@ -29,8 +30,7 @@ public class MultiSelectQuestionViewHolder extends QuestionViewHolder<MultiSelec
         nextButton = itemView.findViewById(R.id.next_button);
     }
 
-    @Override
-    public void bind(MultiSelectQuestion question) {
+    public void bind(MultiSelectQuestion question, QuestionState questionState) {
         super.bind(question);
         LayoutInflater layoutInflater = LayoutInflater.from(getContext());
         for (Option option : question.options) {

@@ -36,7 +36,7 @@ import com.recoveryrecord.surveyandroid.viewholder.YearPickerQuestionViewHolder;
 public class SurveyQuestionAdapter extends RecyclerView.Adapter<QuestionViewHolder> {
 
     private Context mContext;
-    private SurveyQuestionsState mState;
+    private SurveyState mState;
 
     public enum QuestionType {
         SINGLE_SELECT("single_select"),
@@ -73,7 +73,7 @@ public class SurveyQuestionAdapter extends RecyclerView.Adapter<QuestionViewHold
         }
     }
 
-    SurveyQuestionAdapter(Context context, SurveyQuestionsState state) {
+    SurveyQuestionAdapter(Context context, SurveyState state) {
         mContext = context;
         mState = state;
     }
@@ -118,58 +118,59 @@ public class SurveyQuestionAdapter extends RecyclerView.Adapter<QuestionViewHold
     public void onBindViewHolder(@NonNull QuestionViewHolder questionViewHolder, int position) {
         Question question = getItem(position);
         QuestionType questionType = getQuestionType(position);
+        QuestionState questionState = mState.getStateFor(question.id);
         switch (questionType) {
             case SINGLE_SELECT:
                 if (questionViewHolder instanceof SingleSelectQuestionViewHolder && question instanceof SingleSelectQuestion) {
-                    ((SingleSelectQuestionViewHolder) questionViewHolder).bind((SingleSelectQuestion) question);
+                    ((SingleSelectQuestionViewHolder) questionViewHolder).bind((SingleSelectQuestion) question, questionState);
                 }
                 break;
             case MULTI_SELECT:
                 if (questionViewHolder instanceof MultiSelectQuestionViewHolder && question instanceof MultiSelectQuestion) {
-                    ((MultiSelectQuestionViewHolder) questionViewHolder).bind((MultiSelectQuestion) question);
+                    ((MultiSelectQuestionViewHolder) questionViewHolder).bind((MultiSelectQuestion) question, questionState);
                 }
                 break;
             case YEAR_PICKER:
                 if (questionViewHolder instanceof YearPickerQuestionViewHolder && question instanceof YearPickerQuestion) {
-                    ((YearPickerQuestionViewHolder) questionViewHolder).bind((YearPickerQuestion) question);
+                    ((YearPickerQuestionViewHolder) questionViewHolder).bind((YearPickerQuestion) question, questionState);
                 }
                 break;
             case DATE_PICKER:
                 if (questionViewHolder instanceof DatePickerQuestionViewHolder && question instanceof DatePickerQuestion) {
-                    ((DatePickerQuestionViewHolder) questionViewHolder).bind((DatePickerQuestion) question);
+                    ((DatePickerQuestionViewHolder) questionViewHolder).bind((DatePickerQuestion) question, questionState);
                 }
                 break;
             case SINGLE_TEXT_FIELD:
                 if (questionViewHolder instanceof SingleTextFieldQuestionViewHolder && question instanceof SingleTextFieldQuestion) {
-                    ((SingleTextFieldQuestionViewHolder) questionViewHolder).bind((SingleTextFieldQuestion) question);
+                    ((SingleTextFieldQuestionViewHolder) questionViewHolder).bind((SingleTextFieldQuestion) question, questionState);
                 }
                 break;
             case SINGLE_TEXT_AREA:
                 if (questionViewHolder instanceof SingleTextAreaQuestionViewHolder && question instanceof SingleTextAreaQuestion) {
-                    ((SingleTextAreaQuestionViewHolder) questionViewHolder).bind((SingleTextAreaQuestion) question);
+                    ((SingleTextAreaQuestionViewHolder) questionViewHolder).bind((SingleTextAreaQuestion) question, questionState);
                 }
             case MULTI_TEXT_FIELD:
                 if (questionViewHolder instanceof MultiTextFieldQuestionViewHolder && question instanceof MultiTextFieldQuestion) {
-                    ((MultiTextFieldQuestionViewHolder) questionViewHolder).bind((MultiTextFieldQuestion) question);
+                    ((MultiTextFieldQuestionViewHolder) questionViewHolder).bind((MultiTextFieldQuestion) question, questionState);
                 }
                 break;
             case DYNAMIC_LABEL_TEXT_FIELD:
                 if (questionViewHolder instanceof DynamicLabelTextFieldQuestionViewHolder && question instanceof DynamicLabelTextFieldQuestion) {
-                    ((DynamicLabelTextFieldQuestionViewHolder) questionViewHolder).bind((DynamicLabelTextFieldQuestion) question);
+                    ((DynamicLabelTextFieldQuestionViewHolder) questionViewHolder).bind((DynamicLabelTextFieldQuestion) question, questionState);
                 }                break;
             case ADD_TEXT_FIELD:
                 if (questionViewHolder instanceof AddTextFieldQuestionViewHolder && question instanceof AddTextFieldQuestion) {
-                    ((AddTextFieldQuestionViewHolder) questionViewHolder).bind((AddTextFieldQuestion) question);
+                    ((AddTextFieldQuestionViewHolder) questionViewHolder).bind((AddTextFieldQuestion) question, questionState);
                 }
                 break;
             case SEGMENT_SELECT:
                 if (questionViewHolder instanceof SegmentSelectQuestionViewHolder && question instanceof SegmentSelectQuestion) {
-                    ((SegmentSelectQuestionViewHolder) questionViewHolder).bind((SegmentSelectQuestion) question);
+                    ((SegmentSelectQuestionViewHolder) questionViewHolder).bind((SegmentSelectQuestion) question, questionState);
                 }
                 break;
             case TABLE_SELECT:
                 if (questionViewHolder instanceof TableSelectQuestionViewHolder && question instanceof TableSelectQuestion) {
-                    ((TableSelectQuestionViewHolder) questionViewHolder).bind((TableSelectQuestion) question);
+                    ((TableSelectQuestionViewHolder) questionViewHolder).bind((TableSelectQuestion) question, questionState);
                 }
                 break;
         }

@@ -4,6 +4,7 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 import android.view.View;
 
+import com.recoveryrecord.surveyandroid.QuestionState;
 import com.recoveryrecord.surveyandroid.question.YearPickerQuestion;
 
 public class YearPickerQuestionViewHolder extends QuestionViewHolder<YearPickerQuestion> {
@@ -12,8 +13,8 @@ public class YearPickerQuestionViewHolder extends QuestionViewHolder<YearPickerQ
         super(context, itemView);
     }
 
-    @Override
-    public void bind(YearPickerQuestion question) {
+    public void bind(YearPickerQuestion question, QuestionState questionState) {
+        super.bind(question);
         // TODO
     }
 }

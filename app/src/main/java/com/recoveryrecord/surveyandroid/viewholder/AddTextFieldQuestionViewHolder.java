@@ -4,6 +4,7 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 import android.view.View;
 
+import com.recoveryrecord.surveyandroid.QuestionState;
 import com.recoveryrecord.surveyandroid.question.AddTextFieldQuestion;
 
 public class AddTextFieldQuestionViewHolder extends QuestionViewHolder<AddTextFieldQuestion> {
@@ -12,8 +13,9 @@ public class AddTextFieldQuestionViewHolder extends QuestionViewHolder<AddTextFi
         super(context, itemView);
     }
 
-    @Override
-    public void bind(AddTextFieldQuestion question) {
+    public void bind(AddTextFieldQuestion question, QuestionState questionState) {
+        super.bind(question);
         // TODO
+
     }
 }

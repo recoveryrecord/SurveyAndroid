@@ -12,6 +12,7 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.recoveryrecord.surveyandroid.QuestionState;
 import com.recoveryrecord.surveyandroid.R;
 import com.recoveryrecord.surveyandroid.question.SingleTextFieldQuestion;
 
@@ -46,8 +47,7 @@ public class SingleTextFieldQuestionViewHolder extends QuestionViewHolder<Single
         });
     }
 
-    @Override
-    public void bind(SingleTextFieldQuestion question) {
+    public void bind(SingleTextFieldQuestion question, QuestionState questionState) {
         super.bind(question);
         answerInputLayout.setHint(question.label);
         if (question.maxChars != null) {

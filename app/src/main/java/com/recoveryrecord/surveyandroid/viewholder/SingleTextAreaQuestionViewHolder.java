@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
+import com.recoveryrecord.surveyandroid.QuestionState;
 import com.recoveryrecord.surveyandroid.R;
 import com.recoveryrecord.surveyandroid.question.SingleTextAreaQuestion;
 
@@ -30,8 +31,7 @@ public class SingleTextAreaQuestionViewHolder extends QuestionViewHolder<SingleT
         });
     }
 
-    @Override
-    public void bind(SingleTextAreaQuestion singleTextAreaQuestion) {
+    public void bind(SingleTextAreaQuestion singleTextAreaQuestion, QuestionState questionState) {
         super.bind(singleTextAreaQuestion);
         if (singleTextAreaQuestion.maxChars != null) {
             answerInputLayout.setCounterEnabled(true);

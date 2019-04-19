@@ -10,6 +10,7 @@ import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
+import com.recoveryrecord.surveyandroid.QuestionState;
 import com.recoveryrecord.surveyandroid.R;
 import com.recoveryrecord.surveyandroid.question.Option;
 import com.recoveryrecord.surveyandroid.question.OtherOption;
@@ -31,8 +32,7 @@ public class SingleSelectQuestionViewHolder extends QuestionViewHolder<SingleSel
         nextButton = itemView.findViewById(R.id.next_button);
     }
 
-    @Override
-    public void bind(SingleSelectQuestion question) {
+    public void bind(SingleSelectQuestion question, QuestionState questionState) {
         super.bind(question);
         for (Option option : question.options) {
             final RadioButton radioButton = new RadioButton(getContext());

@@ -13,6 +13,7 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
+import com.recoveryrecord.surveyandroid.QuestionState;
 import com.recoveryrecord.surveyandroid.R;
 import com.recoveryrecord.surveyandroid.question.SegmentSelectQuestion;
 
@@ -32,8 +33,7 @@ public class SegmentSelectQuestionViewHolder extends QuestionViewHolder<SegmentS
         highTagText = itemView.findViewById(R.id.high_tag);
     }
 
-    @Override
-    public void bind(SegmentSelectQuestion question) {
+    public void bind(SegmentSelectQuestion question, QuestionState questionState) {
         super.bind(question);
         LayoutInflater layoutInflater = LayoutInflater.from(getContext());
         for (int i = 0; i < question.values.size(); i++) {

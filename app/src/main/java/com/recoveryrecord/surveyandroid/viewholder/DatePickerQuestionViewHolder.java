@@ -4,6 +4,7 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 import android.view.View;
 
+import com.recoveryrecord.surveyandroid.QuestionState;
 import com.recoveryrecord.surveyandroid.question.DatePickerQuestion;
 
 public class DatePickerQuestionViewHolder extends QuestionViewHolder<DatePickerQuestion> {
@@ -12,8 +13,8 @@ public class DatePickerQuestionViewHolder extends QuestionViewHolder<DatePickerQ
         super(context, itemView);
     }
 
-    @Override
-    public void bind(DatePickerQuestion question) {
+    public void bind(DatePickerQuestion question, QuestionState questionState) {
+        super.bind(question);
         // TODO
     }
 }

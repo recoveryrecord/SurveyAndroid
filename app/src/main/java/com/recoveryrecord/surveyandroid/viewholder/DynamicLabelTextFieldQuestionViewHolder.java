@@ -4,6 +4,7 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 import android.view.View;
 
+import com.recoveryrecord.surveyandroid.QuestionState;
 import com.recoveryrecord.surveyandroid.question.DynamicLabelTextFieldQuestion;
 
 public class DynamicLabelTextFieldQuestionViewHolder extends QuestionViewHolder<DynamicLabelTextFieldQuestion> {
@@ -12,8 +13,8 @@ public class DynamicLabelTextFieldQuestionViewHolder extends QuestionViewHolder<
         super(context, itemView);
     }
 
-    @Override
-    public void bind(DynamicLabelTextFieldQuestion question) {
+    public void bind(DynamicLabelTextFieldQuestion question, QuestionState questionState) {
+        super.bind(question);
         // TODO
     }
 }
