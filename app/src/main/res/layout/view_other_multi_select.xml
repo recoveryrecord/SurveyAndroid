@@ -1,13 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.design.widget.TextInputLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/answer_input_layout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-    android:hint="@string/please_specify"
-    app:hintAnimationEnabled="true"
+    style="@style/Widget.SurveyAndroid.TextInputLayout"
     android:visibility="gone"
     >
 

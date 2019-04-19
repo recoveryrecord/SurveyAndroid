@@ -8,42 +8,28 @@
 
     <TextView
         android:id="@+id/header_text"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textStyle="bold"
-        android:textAllCaps="true"
-        android:padding="5dp"
+        style="@style/Widget.SurveyAndroid.HeaderText"
         tools:text="Header 1"
         />
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@android:color/white"
-        android:orientation="vertical"
-        android:padding="5dp"
-        >
+    <LinearLayout style="@style/Widget.SurveyAndroid.QuestionCard">
 
         <TextView
             android:id="@+id/question_text"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textColor="@android:color/black"
+            style="@style/Widget.SurveyAndroid.QuestionText"
             tools:text="What is your favorite ice cream flavor?"
             />
 
         <RadioGroup
             android:id="@+id/segment_selector"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:paddingTop="5dp"
-            />
+            style="@style/Widget.SurveyAndroid.SegmentRadioGroup" />
 
         <LinearLayout
             android:id="@+id/tag_container"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            style="@style/Widget.SurveyAndroid.SegmentTagsContainer"
+            >
 
             <TextView
                 android:id="@+id/low_tag"
@@ -51,6 +37,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center_vertical|start"
+                style="@style/Widget.SurveyAndroid.SegmentTag"
                 tools:text="Low"
                 />
 
@@ -60,6 +47,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center_vertical|end"
+                style="@style/Widget.SurveyAndroid.SegmentTag"
                 tools:text="High"
                 />
 

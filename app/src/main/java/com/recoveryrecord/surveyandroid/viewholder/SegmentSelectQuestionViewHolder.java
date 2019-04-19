@@ -1,8 +1,11 @@
 package com.recoveryrecord.surveyandroid.viewholder;
 
 import android.content.Context;
+import android.content.res.Resources;
+import android.support.annotation.AttrRes;
 import android.support.annotation.DrawableRes;
 import android.support.annotation.NonNull;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,15 +38,18 @@ public class SegmentSelectQuestionViewHolder extends QuestionViewHolder<SegmentS
         LayoutInflater layoutInflater = LayoutInflater.from(getContext());
         for (int i = 0; i < question.values.size(); i++) {
             RadioButton  radioButton = (RadioButton) layoutInflater.inflate(R.layout.radio_button_segment, segmentSelector, false);
-            @DrawableRes int background;
+            @AttrRes int backgroundAttr;
             if (i == 0) {
-                background = R.drawable.first_segment_background;
+                backgroundAttr = R.attr.firstSegmentBackground;
             } else if (i + 1 == question.values.size()) {
-                background = R.drawable.last_segment_background;
+                backgroundAttr = R.attr.lastSegmentBackground;
             } else {
-                background = R.drawable.middle_segment_background;
+                backgroundAttr = R.attr.middleSegmentBackground;
             }
-            radioButton.setBackgroundResource(background);
+            TypedValue typedValue = new TypedValue();
+            Resources.Theme theme = getContext().getTheme();
+            theme.resolveAttribute(backgroundAttr, typedValue, true);
+            radioButton.setBackgroundResource(typedValue.resourceId);
             radioButton.setText(question.values.get(i));
             segmentSelector.addView(radioButton);
         }

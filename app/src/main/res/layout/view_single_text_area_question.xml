@@ -8,29 +8,15 @@
 
     <TextView
         android:id="@+id/header_text"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textStyle="bold"
-        android:textAllCaps="true"
-        android:padding="5dp"
+        style="@style/Widget.SurveyAndroid.HeaderText"
         tools:text="Header 1"
         />
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@android:color/white"
-        android:orientation="vertical"
-        android:padding="5dp"
-        >
+    <LinearLayout style="@style/Widget.SurveyAndroid.QuestionCard">
 
         <TextView
             android:id="@+id/question_text"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingTop="10dp"
-            android:paddingBottom="10dp"
-            android:textColor="@android:color/black"
+            style="@style/Widget.SurveyAndroid.QuestionText"
             tools:text="What is your favorite ice cream flavor?"
             />
 
@@ -38,26 +24,17 @@
             android:id="@+id/answer_input_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+            style="@style/Widget.SurveyAndroid.TextInputLayout">
 
             <android.support.design.widget.TextInputEditText
                 android:id="@+id/answer_edit"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:lines="4"
-                android:inputType="textMultiLine|textCapSentences|textAutoCorrect"
-                android:gravity="top|start"
-                />
+                style="@style/Widget.SurveyAndroid.TextAreaEditText" />
 
         </android.support.design.widget.TextInputLayout>
 
         <Button
             android:id="@+id/next_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical|end"
-            android:text="@string/next"
-            style="@style/Base.Widget.AppCompat.Button.Borderless"
+            style="@style/Widget.SurveyAndroid.NextButton"
             />
 
     </LinearLayout>

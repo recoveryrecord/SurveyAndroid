@@ -15,9 +15,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-        android:hint="@string/please_specify"
-        app:hintAnimationEnabled="true">
+        style="@style/Widget.SurveyAndroid.TextInputLayout">
 
         <android.support.design.widget.TextInputEditText
             android:id="@+id/edit_other"
@@ -31,11 +29,7 @@
 
     <Button
         android:id="@+id/next_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical"
-        android:text="@string/next"
-        style="@style/Base.Widget.AppCompat.Button.Borderless"
+        style="@style/Widget.SurveyAndroid.NextButton"
         />
 
 </LinearLayout>
