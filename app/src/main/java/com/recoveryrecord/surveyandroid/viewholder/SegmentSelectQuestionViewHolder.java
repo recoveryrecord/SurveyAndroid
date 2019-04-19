@@ -3,7 +3,6 @@ package com.recoveryrecord.surveyandroid.viewholder;
 import android.content.Context;
 import android.content.res.Resources;
 import android.support.annotation.AttrRes;
-import android.support.annotation.DrawableRes;
 import android.support.annotation.NonNull;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
@@ -18,6 +17,7 @@ import com.recoveryrecord.surveyandroid.R;
 import com.recoveryrecord.surveyandroid.question.SegmentSelectQuestion;
 
 public class SegmentSelectQuestionViewHolder extends QuestionViewHolder<SegmentSelectQuestion> {
+    private static final String SELECTED_SEGMENT_KEY = "selected_segment";
 
     private RadioGroup segmentSelector;
     private ViewGroup tagContainer;
@@ -33,9 +33,11 @@ public class SegmentSelectQuestionViewHolder extends QuestionViewHolder<SegmentS
         highTagText = itemView.findViewById(R.id.high_tag);
     }
 
-    public void bind(SegmentSelectQuestion question, QuestionState questionState) {
+    public void bind(final SegmentSelectQuestion question, final QuestionState questionState) {
         super.bind(question);
         LayoutInflater layoutInflater = LayoutInflater.from(getContext());
+        int checkedId = -1;
+        String selectedSegment = questionState.getString(SELECTED_SEGMENT_KEY);
         for (int i = 0; i < question.values.size(); i++) {
             RadioButton  radioButton = (RadioButton) layoutInflater.inflate(R.layout.radio_button_segment, segmentSelector, false);
             @AttrRes int backgroundAttr;
@@ -52,7 +54,23 @@ public class SegmentSelectQuestionViewHolder extends QuestionViewHolder<SegmentS
             radioButton.setBackgroundResource(typedValue.resourceId);
             radioButton.setText(question.values.get(i));
             segmentSelector.addView(radioButton);
+            if (question.values.get(i).equals(selectedSegment)) {
+                checkedId = radioButton.getId();
+            }
         }
+        segmentSelector.check(checkedId);
+        segmentSelector.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                if (checkedId == -1) {
+                    return;
+                }
+                RadioButton selectedButton = segmentSelector.findViewById(checkedId);
+                String selectedTitle = selectedButton.getText().toString();
+                questionState.put(SELECTED_SEGMENT_KEY, selectedTitle);
+                questionState.setAnswer(selectedTitle);
+            }
+        });
         tagContainer.setVisibility(question.lowTag != null || question.highTag != null ? View.VISIBLE : View.GONE);
         lowTagText.setText(question.lowTag);
         highTagText.setText(question.highTag);
@@ -61,6 +79,7 @@ public class SegmentSelectQuestionViewHolder extends QuestionViewHolder<SegmentS
     @Override
     protected void resetState() {
         super.resetState();
+        segmentSelector.setOnCheckedChangeListener(null);
         segmentSelector.removeAllViews();
     }
 }
