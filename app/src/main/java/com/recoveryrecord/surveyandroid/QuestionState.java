@@ -28,7 +28,11 @@ public class QuestionState {
         }
     }
 
-    public boolean containsKey(String key) {
+    public void put(String key, boolean value) {
+        mQuestionData.put(key, String.valueOf(value));
+    }
+
+    private boolean containsKey(String key) {
         return mQuestionData.containsKey(key);
     }
 
@@ -37,6 +41,14 @@ public class QuestionState {
         if (mListener != null) {
             mListener.questionAnswered(this);
         }
+    }
+
+    public String get(String key, String defaultValue) {
+        return containsKey(key) ? get(key) : defaultValue;
+    }
+
+    public boolean get(String key, boolean defaultValue) {
+        return containsKey(key) ? Boolean.valueOf(get(key)) : defaultValue;
     }
 
     public String get(String key) {

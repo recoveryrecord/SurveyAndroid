@@ -22,6 +22,7 @@ public class SingleSelectQuestionViewHolder extends QuestionViewHolder<SingleSel
 
     private static final String CHECKED_BUTTON_TITLE_KEY = "checked_button_title";
     private static final String EDIT_TEXT_KEY = "edit_text";
+    private static final String ANSWER_ON_EDIT_UPDATE_KEY = "answer_on_edit_update_key";
 
     private RadioGroup answerSelector;
     private ViewGroup otherSection;
@@ -40,21 +41,22 @@ public class SingleSelectQuestionViewHolder extends QuestionViewHolder<SingleSel
 
     public void bind(final SingleSelectQuestion question, final QuestionState questionState) {
         super.bind(question);
+        int checkedId = -1;
         for (Option option : question.options) {
             final RadioButton radioButton = new RadioButton(getContext());
             radioButton.setText(option.title);
-            if (option.title.equals(questionState.get(CHECKED_BUTTON_TITLE_KEY))) {
-                radioButton.setChecked(true);
-            }
             if (option instanceof OtherOption) {
                 radioButton.setTag(R.id.is_other, Boolean.TRUE);
-                if (radioButton.isChecked()) {
+                if (shouldCheckButton(questionState, option.title)) {
                     otherSection.setVisibility(View.VISIBLE);
                 }
             }
             answerSelector.addView(radioButton);
-
+            if (shouldCheckButton(questionState, option.title)) {
+                checkedId = radioButton.getId();
+            }
         }
+        answerSelector.check(checkedId);
         answerSelector.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
@@ -65,6 +67,7 @@ public class SingleSelectQuestionViewHolder extends QuestionViewHolder<SingleSel
                 } else {
                     otherSection.setVisibility(View.GONE);
                     questionState.setAnswer(selectedButton.getText().toString());
+                    questionState.put(ANSWER_ON_EDIT_UPDATE_KEY, true);
                 }
 
 
@@ -75,6 +78,9 @@ public class SingleSelectQuestionViewHolder extends QuestionViewHolder<SingleSel
             @Override
             public void afterTextChanged(Editable s) {
                 questionState.put(EDIT_TEXT_KEY, s.toString());
+                if (questionState.get(ANSWER_ON_EDIT_UPDATE_KEY, false)) {
+                    questionState.setAnswer(s.toString());
+                }
             }
         };
         editOther.addTextChangedListener(editTextWatcher);
@@ -84,7 +90,10 @@ public class SingleSelectQuestionViewHolder extends QuestionViewHolder<SingleSel
                 onNext(questionState);
             }
         });
+    }
 
+    private boolean shouldCheckButton(QuestionState questionState, String title) {
+        return title.equals(questionState.get(CHECKED_BUTTON_TITLE_KEY));
     }
 
     private boolean isButtonOther(Button button) {
@@ -100,6 +109,7 @@ public class SingleSelectQuestionViewHolder extends QuestionViewHolder<SingleSel
             editOther.removeTextChangedListener(editTextWatcher);
         }
         editOther.setText(null);
+        nextButton.setOnClickListener(null);
     }
 
     private void onNext(QuestionState questionState) {
@@ -107,5 +117,6 @@ public class SingleSelectQuestionViewHolder extends QuestionViewHolder<SingleSel
         if (isButtonOther(selectedButton)) {
             questionState.setAnswer(editOther.getText().toString());
         }
+        questionState.put(ANSWER_ON_EDIT_UPDATE_KEY, true);
     }
 }
