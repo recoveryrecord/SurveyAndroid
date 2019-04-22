@@ -31,4 +31,7 @@ public abstract class Question {
 
     @JsonProperty("sub_questions")
     public ArrayList<Question> subQuestions;
+
+    @JsonProperty("show_if")
+    public Condition showIf;
 }

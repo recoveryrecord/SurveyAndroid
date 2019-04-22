@@ -99,7 +99,7 @@ public class SurveyQuestionAdapter extends RecyclerView.Adapter<QuestionViewHold
             case SINGLE_TEXT_FIELD:
                 return new SingleTextFieldQuestionViewHolder(getContext(), view, mState.getValidator());
             case SINGLE_TEXT_AREA:
-                return new SingleTextAreaQuestionViewHolder(getContext(), view);
+                return new SingleTextAreaQuestionViewHolder(getContext(), view, mState.getValidator());
             case MULTI_TEXT_FIELD:
                 return new MultiTextFieldQuestionViewHolder(getContext(), view);
             case DYNAMIC_LABEL_TEXT_FIELD:
