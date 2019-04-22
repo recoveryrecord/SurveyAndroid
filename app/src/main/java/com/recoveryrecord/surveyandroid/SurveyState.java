@@ -1,5 +1,7 @@
 package com.recoveryrecord.surveyandroid;
 
+import com.recoveryrecord.surveyandroid.condition.ConditionEvaluator;
+import com.recoveryrecord.surveyandroid.condition.CustomConditionHandler;
 import com.recoveryrecord.surveyandroid.question.Question;
 import com.recoveryrecord.surveyandroid.validation.AnswerProvider;
 import com.recoveryrecord.surveyandroid.validation.Validator;
@@ -13,12 +15,14 @@ public class SurveyState implements OnQuestionStateChangedListener, AnswerProvid
     private SurveyQuestions mSurveyQuestions;
     private Map<String, QuestionState> mQuestionStateMap;
     private Validator mValidator;
+    private ConditionEvaluator mConditionEvaluator;
 
     private int mVisibleQuestionCount = 1;
 
     public SurveyState(SurveyQuestions surveyQuestions) {
         mSurveyQuestions = surveyQuestions;
         mQuestionStateMap = new HashMap<>();
+        mConditionEvaluator = new ConditionEvaluator(this);
     }
 
     public void setValidator(Validator validator) {
@@ -27,6 +31,14 @@ public class SurveyState implements OnQuestionStateChangedListener, AnswerProvid
 
     protected Validator getValidator() {
         return mValidator;
+    }
+
+    public void setCustomConditionHandler(CustomConditionHandler handler) {
+        mConditionEvaluator.setCustomConditionHandler(handler);
+    }
+
+    public ConditionEvaluator getConditionEvaluator() {
+        return mConditionEvaluator;
     }
 
     public Integer getVisibleQuestionCount() {

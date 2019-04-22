@@ -8,6 +8,7 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.recoveryrecord.surveyandroid.condition.CustomConditionHandler;
 import com.recoveryrecord.surveyandroid.validation.AnswerProvider;
 import com.recoveryrecord.surveyandroid.validation.DefaultValidator;
 import com.recoveryrecord.surveyandroid.validation.FailedValidationListener;
@@ -56,6 +57,11 @@ public abstract class SurveyActivity extends AppCompatActivity implements Failed
 
     protected Validator getValidator() {
         return new DefaultValidator(this, getAnswerProvider());
+    }
+
+    // Subclasses should return a non-null if they are using custom show_if conditions.
+    protected CustomConditionHandler getCustomConditionHandler() {
+        return null;
     }
 
     protected AnswerProvider getAnswerProvider() {
