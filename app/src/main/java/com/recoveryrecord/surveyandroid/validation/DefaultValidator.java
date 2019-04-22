@@ -6,8 +6,6 @@ import java.util.List;
 import java.util.Map;
 
 public class DefaultValidator implements Validator {
-    private static ValidationResult SUCCESSFUL_RESULT = new ValidationResult(true, null);
-
     private FailedValidationListener mListener;
     private AnswerProvider mAnswerProvider;
 
@@ -19,20 +17,20 @@ public class DefaultValidator implements Validator {
     @Override
     public ValidationResult validate(List<Validation> validations, String answer) {
         if (validations == null || validations.isEmpty()) {
-            return SUCCESSFUL_RESULT;
+            return ValidationResult.success();
         }
         for (Validation validation : validations) {
             if (!isConditionMet(validation, answer)) {
                 return new ValidationResult(false, validation.onFailMessage);
             }
         }
-        return SUCCESSFUL_RESULT;
+        return ValidationResult.success();
     }
 
     @Override
     public ValidationResult validate(List<Validation> validations, Map<String, String> answers) {
         if (validations == null || validations.isEmpty()) {
-            return SUCCESSFUL_RESULT;
+            return ValidationResult.success();
         }
         for (Validation validation : validations) {
             String answer = answers.get(validation.forLabel);
@@ -43,7 +41,7 @@ public class DefaultValidator implements Validator {
                 return new ValidationResult(false, validation.onFailMessage);
             }
         }
-        return SUCCESSFUL_RESULT;
+        return ValidationResult.success();
     }
 
     private boolean isConditionMet(Validation validation, String answer) {

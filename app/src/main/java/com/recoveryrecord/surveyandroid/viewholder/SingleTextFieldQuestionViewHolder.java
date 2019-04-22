@@ -105,7 +105,9 @@ public class SingleTextFieldQuestionViewHolder extends QuestionViewHolder<Single
         if (getValidator() == null && validations != null && !validations.isEmpty()) {
             throw new IllegalStateException("No validator available for validations");
         }
-        ValidationResult validationResult = getValidator().validate(validations, answer);
+        ValidationResult validationResult = getValidator() == null ?
+                ValidationResult.success() :
+                getValidator().validate(validations, answer);
         if (validationResult.isValid) {
             questionState.setAnswer(answer);
             questionState.put(ANSWER_ON_EDIT_UPDATE_KEY, true);

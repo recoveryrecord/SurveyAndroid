@@ -12,25 +12,38 @@ import android.widget.Button;
 import com.recoveryrecord.surveyandroid.QuestionState;
 import com.recoveryrecord.surveyandroid.R;
 import com.recoveryrecord.surveyandroid.question.SingleTextAreaQuestion;
+import com.recoveryrecord.surveyandroid.question.Validation;
 import com.recoveryrecord.surveyandroid.util.SimpleTextWatcher;
+import com.recoveryrecord.surveyandroid.validation.ValidationResult;
+import com.recoveryrecord.surveyandroid.validation.Validator;
+
+import java.util.ArrayList;
 
 public class SingleTextAreaQuestionViewHolder extends QuestionViewHolder<SingleTextAreaQuestion> {
     private static final String EDIT_TEXT_KEY = "edit_text";
     private static final String ANSWER_ON_EDIT_UPDATE_KEY = "answer_on_edit_update_key";
+
+    private Validator mValidator;
 
     private TextInputLayout answerInputLayout;
     private TextInputEditText answerEdit;
     private TextWatcher editTextWatcher;
     private Button nextButton;
 
-    public SingleTextAreaQuestionViewHolder(Context context, @NonNull View itemView) {
+    public SingleTextAreaQuestionViewHolder(Context context, @NonNull View itemView, Validator validator) {
         super(context, itemView);
+        mValidator = validator;
+
         answerInputLayout = itemView.findViewById(R.id.answer_input_layout);
         answerEdit = itemView.findViewById(R.id.answer_edit);
         nextButton = itemView.findViewById(R.id.next_button);
     }
 
-    public void bind(SingleTextAreaQuestion singleTextAreaQuestion, final QuestionState questionState) {
+    private Validator getValidator() {
+        return mValidator;
+    }
+
+    public void bind(final SingleTextAreaQuestion singleTextAreaQuestion, final QuestionState questionState) {
         super.bind(singleTextAreaQuestion);
         if (singleTextAreaQuestion.maxChars != null) {
             answerInputLayout.setCounterEnabled(true);
@@ -50,7 +63,7 @@ public class SingleTextAreaQuestionViewHolder extends QuestionViewHolder<SingleT
         nextButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                onNext(questionState);
+                onNext(questionState, singleTextAreaQuestion.validations);
             }
         });
     }
@@ -66,9 +79,19 @@ public class SingleTextAreaQuestionViewHolder extends QuestionViewHolder<SingleT
         nextButton.setOnClickListener(null);
     }
 
-    private void onNext(QuestionState questionState) {
-        // TODO: impl validation
-        questionState.setAnswer(answerEdit.getText().toString());
-        questionState.put(ANSWER_ON_EDIT_UPDATE_KEY, true);
+    private void onNext(QuestionState questionState, ArrayList<Validation> validations) {
+        String answer = answerEdit.getText() != null ? answerEdit.getText().toString() : null;
+        if (getValidator() == null && validations != null && !validations.isEmpty()) {
+            throw new IllegalStateException("No validator available for validations");
+        }
+        ValidationResult validationResult = getValidator() == null ?
+                ValidationResult.success() :
+                getValidator().validate(validations, answer);
+        if (validationResult.isValid) {
+            questionState.setAnswer(answer);
+            questionState.put(ANSWER_ON_EDIT_UPDATE_KEY, true);
+        } else {
+            getValidator().validationFailed(validationResult.failedMessage);
+        }
     }
 }

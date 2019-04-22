@@ -8,4 +8,8 @@ public class ValidationResult {
         this.isValid = isValid;
         this.failedMessage = failedMessage;
     }
+
+    public static ValidationResult success() {
+        return new ValidationResult(true, "");
+    }
 }
