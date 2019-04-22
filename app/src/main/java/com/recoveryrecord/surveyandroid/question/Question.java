@@ -3,6 +3,7 @@ package com.recoveryrecord.surveyandroid.question;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import com.recoveryrecord.surveyandroid.condition.Condition;
 
 import java.util.ArrayList;
 

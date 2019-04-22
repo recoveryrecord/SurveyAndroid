@@ -50,7 +50,7 @@ public class DefaultValidator implements Validator {
             if (mAnswerProvider == null) {
                 throw new IllegalStateException("Validation requires a non-null AnswerProvider");
             }
-            value = Double.parseDouble(mAnswerProvider.answerFor(validation.answerToQuestionId));
+            value = Double.parseDouble(mAnswerProvider.answerFor(validation.answerToQuestionId).getValue());
         }
         Double numAnswer = Double.parseDouble(answer);
         switch (validation.operation) {

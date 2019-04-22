@@ -1,4 +1,4 @@
-package com.recoveryrecord.surveyandroid.question;
+package com.recoveryrecord.surveyandroid.condition;
 
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;

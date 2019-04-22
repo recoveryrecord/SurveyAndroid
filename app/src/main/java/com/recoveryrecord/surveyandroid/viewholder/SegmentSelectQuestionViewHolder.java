@@ -12,6 +12,7 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
+import com.recoveryrecord.surveyandroid.Answer;
 import com.recoveryrecord.surveyandroid.QuestionState;
 import com.recoveryrecord.surveyandroid.R;
 import com.recoveryrecord.surveyandroid.question.SegmentSelectQuestion;
@@ -68,7 +69,7 @@ public class SegmentSelectQuestionViewHolder extends QuestionViewHolder<SegmentS
                 RadioButton selectedButton = segmentSelector.findViewById(checkedId);
                 String selectedTitle = selectedButton.getText().toString();
                 questionState.put(SELECTED_SEGMENT_KEY, selectedTitle);
-                questionState.setAnswer(selectedTitle);
+                questionState.setAnswer(new Answer(selectedTitle));
             }
         });
         tagContainer.setVisibility(question.lowTag != null || question.highTag != null ? View.VISIBLE : View.GONE);

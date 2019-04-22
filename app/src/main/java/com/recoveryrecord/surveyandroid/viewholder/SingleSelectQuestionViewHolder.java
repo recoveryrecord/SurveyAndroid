@@ -11,6 +11,7 @@ import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
+import com.recoveryrecord.surveyandroid.Answer;
 import com.recoveryrecord.surveyandroid.QuestionState;
 import com.recoveryrecord.surveyandroid.R;
 import com.recoveryrecord.surveyandroid.question.Option;
@@ -66,7 +67,7 @@ public class SingleSelectQuestionViewHolder extends QuestionViewHolder<SingleSel
                     otherSection.setVisibility(View.VISIBLE);
                 } else {
                     otherSection.setVisibility(View.GONE);
-                    questionState.setAnswer(selectedButton.getText().toString());
+                    questionState.setAnswer(new Answer(selectedButton.getText().toString()));
                     questionState.put(ANSWER_ON_EDIT_UPDATE_KEY, true);
                 }
 
@@ -79,7 +80,7 @@ public class SingleSelectQuestionViewHolder extends QuestionViewHolder<SingleSel
             public void afterTextChanged(Editable s) {
                 questionState.put(EDIT_TEXT_KEY, s.toString());
                 if (questionState.getBool(ANSWER_ON_EDIT_UPDATE_KEY, false)) {
-                    questionState.setAnswer(s.toString());
+                    questionState.setAnswer(new Answer(s.toString()));
                 }
             }
         };
@@ -116,7 +117,7 @@ public class SingleSelectQuestionViewHolder extends QuestionViewHolder<SingleSel
     private void onNext(QuestionState questionState) {
         RadioButton selectedButton = answerSelector.findViewById(answerSelector.getCheckedRadioButtonId());
         if (isButtonOther(selectedButton)) {
-            questionState.setAnswer(editOther.getText().toString());
+            questionState.setAnswer(new Answer(editOther.getText().toString()));
         }
         questionState.put(ANSWER_ON_EDIT_UPDATE_KEY, true);
     }

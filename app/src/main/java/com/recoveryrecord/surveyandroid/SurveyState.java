@@ -2,7 +2,6 @@ package com.recoveryrecord.surveyandroid;
 
 import com.recoveryrecord.surveyandroid.question.Question;
 import com.recoveryrecord.surveyandroid.validation.AnswerProvider;
-import com.recoveryrecord.surveyandroid.validation.DefaultValidator;
 import com.recoveryrecord.surveyandroid.validation.Validator;
 
 import java.util.HashMap;
@@ -61,8 +60,8 @@ public class SurveyState implements OnQuestionStateChangedListener, AnswerProvid
     }
 
     @Override
-    public String answerFor(String questionId) {
+    public Answer answerFor(String questionId) {
         QuestionState questionState = getStateFor(questionId);
-        return questionState.answer();
+        return questionState.getAnswer();
     }
 }

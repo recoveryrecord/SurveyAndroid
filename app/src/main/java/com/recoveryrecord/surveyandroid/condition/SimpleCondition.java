@@ -1,4 +1,4 @@
-package com.recoveryrecord.surveyandroid.question;
+package com.recoveryrecord.surveyandroid.condition;
 
 public class SimpleCondition extends Condition {
     public String id;

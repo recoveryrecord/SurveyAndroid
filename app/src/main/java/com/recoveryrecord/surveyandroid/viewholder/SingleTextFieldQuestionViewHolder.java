@@ -13,6 +13,7 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.recoveryrecord.surveyandroid.Answer;
 import com.recoveryrecord.surveyandroid.QuestionState;
 import com.recoveryrecord.surveyandroid.R;
 import com.recoveryrecord.surveyandroid.question.SingleTextFieldQuestion;
@@ -63,7 +64,7 @@ public class SingleTextFieldQuestionViewHolder extends QuestionViewHolder<Single
             public void afterTextChanged(Editable s) {
                 questionState.put(EDIT_TEXT_KEY, s.toString());
                 if (questionState.getBool(ANSWER_ON_EDIT_UPDATE_KEY, false)) {
-                    questionState.setAnswer(s.toString());
+                    questionState.setAnswer(new Answer(s.toString()));
                 }
             }
         };
@@ -101,15 +102,15 @@ public class SingleTextFieldQuestionViewHolder extends QuestionViewHolder<Single
     }
 
     private void onNext(QuestionState questionState, ArrayList<Validation> validations) {
-        String answer = answerEdit.getText() != null ? answerEdit.getText().toString() : null;
+        String answerStr = answerEdit.getText() != null ? answerEdit.getText().toString() : null;
         if (getValidator() == null && validations != null && !validations.isEmpty()) {
             throw new IllegalStateException("No validator available for validations");
         }
         ValidationResult validationResult = getValidator() == null ?
                 ValidationResult.success() :
-                getValidator().validate(validations, answer);
+                getValidator().validate(validations, answerStr);
         if (validationResult.isValid) {
-            questionState.setAnswer(answer);
+            questionState.setAnswer(new Answer(answerStr));
             questionState.put(ANSWER_ON_EDIT_UPDATE_KEY, true);
         } else {
             getValidator().validationFailed(validationResult.failedMessage);

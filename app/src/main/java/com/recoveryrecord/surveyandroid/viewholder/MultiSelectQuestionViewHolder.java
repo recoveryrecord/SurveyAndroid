@@ -12,6 +12,7 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 
+import com.recoveryrecord.surveyandroid.Answer;
 import com.recoveryrecord.surveyandroid.QuestionState;
 import com.recoveryrecord.surveyandroid.R;
 import com.recoveryrecord.surveyandroid.question.MultiSelectQuestion;
@@ -31,7 +32,6 @@ public class MultiSelectQuestionViewHolder extends QuestionViewHolder<MultiSelec
     private ViewGroup answerCheckboxContainer;
     private Button nextButton;
     private Map<String, View> otherMap = new HashMap<>();
-    private TextWatcher editTextWatcher;
 
     public MultiSelectQuestionViewHolder(Context context, @NonNull View itemView) {
         super(context, itemView);
@@ -48,7 +48,7 @@ public class MultiSelectQuestionViewHolder extends QuestionViewHolder<MultiSelec
             final CheckBox checkBox = new CheckBox(getContext());
             checkBox.setText(option.title);
             checkBox.setChecked(checkedTitles.contains(option.title));
-            editTextWatcher = new SimpleTextWatcher(){
+            TextWatcher editTextWatcher = new SimpleTextWatcher() {
                 @Override
                 public void afterTextChanged(Editable s) {
                     questionState.put(getEditTextKey(option.title), s.toString());
@@ -123,7 +123,7 @@ public class MultiSelectQuestionViewHolder extends QuestionViewHolder<MultiSelec
     }
 
     private void onNext(QuestionState questionState) {
-        questionState.setAnswer(getSelectedCheckboxTitles());
+        questionState.setAnswer(new Answer(getSelectedCheckboxTitles()));
         questionState.put(ANSWER_ON_CHECK_CHANGE_KEY, true);
     }
 }

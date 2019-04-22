@@ -5,11 +5,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class QuestionState {
-    private static final String ANSWER_KEY = "answer";
     private static final String QUESTION_ID_KEY = "question_id";
 
     private Map<String, String> mQuestionStringData;
     private Map<String, ArrayList<String>> mQuestionStringListData;
+    private Answer mAnswer;
     private OnQuestionStateChangedListener mListener;
 
     QuestionState(String questionId, OnQuestionStateChangedListener listener) {
@@ -22,8 +22,6 @@ public class QuestionState {
     public void put(String key, String value) {
         if (key.equals(QUESTION_ID_KEY)) {
             throw new IllegalArgumentException("The QuestionId cannot be updated!");
-        } else if (key.equals(ANSWER_KEY)) {
-            throw new IllegalArgumentException("The answer should be updated via setAnswer!");
         }
         mQuestionStringData.put(key, value);
         if (mListener != null) {
@@ -59,14 +57,8 @@ public class QuestionState {
         return mQuestionStringData.containsKey(key) || mQuestionStringListData.containsKey(key);
     }
 
-    public void setAnswer(String answer) {
-        mQuestionStringData.put(ANSWER_KEY, answer);
-        if (mListener != null) {
-            mListener.questionAnswered(this);
-        }
-    }
-    public void setAnswer(ArrayList<String> answerList) {
-        mQuestionStringListData.put(ANSWER_KEY, answerList);
+    public void setAnswer(Answer answer) {
+        mAnswer = answer;
         if (mListener != null) {
             mListener.questionAnswered(this);
         }
@@ -92,16 +84,12 @@ public class QuestionState {
         return mQuestionStringListData.containsKey(key) ? mQuestionStringListData.get(key) : defaultValue;
     }
 
-    public String answer() {
-        return mQuestionStringData.get(ANSWER_KEY);
-    }
-
-    public ArrayList<String> answerList() {
-        return mQuestionStringListData.get(ANSWER_KEY);
+    public Answer getAnswer() {
+        return mAnswer;
     }
 
     public boolean isAnswered() {
-        return mQuestionStringData.containsKey(ANSWER_KEY) || mQuestionStringListData.containsKey(ANSWER_KEY);
+        return mAnswer != null;
     }
 
     public String id() {

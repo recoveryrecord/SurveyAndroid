@@ -1,4 +1,4 @@
-package com.recoveryrecord.surveyandroid.question;
+package com.recoveryrecord.surveyandroid.condition;
 
 import java.util.ArrayList;
 import java.util.HashMap;
