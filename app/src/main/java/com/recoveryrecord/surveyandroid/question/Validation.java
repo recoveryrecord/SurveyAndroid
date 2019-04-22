@@ -6,7 +6,7 @@ public class Validation {
 
     public String operation;
 
-    public Integer value;
+    public Double value;
 
     @JsonProperty("answer_to_question_id")
     public String answerToQuestionId;

@@ -1,6 +1,7 @@
 package com.recoveryrecord.surveyandroid.example;
 
 import android.os.Bundle;
+import android.widget.Toast;
 
 import com.recoveryrecord.surveyandroid.R;
 import com.recoveryrecord.surveyandroid.SurveyActivity;

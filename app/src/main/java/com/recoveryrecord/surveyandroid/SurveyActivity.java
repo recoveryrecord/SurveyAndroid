@@ -6,8 +6,14 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.widget.Toast;
 
-public abstract class SurveyActivity extends AppCompatActivity {
+import com.recoveryrecord.surveyandroid.validation.AnswerProvider;
+import com.recoveryrecord.surveyandroid.validation.DefaultValidator;
+import com.recoveryrecord.surveyandroid.validation.FailedValidationListener;
+import com.recoveryrecord.surveyandroid.validation.Validator;
+
+public abstract class SurveyActivity extends AppCompatActivity implements FailedValidationListener {
     private static final String TAG = SurveyActivity.class.getSimpleName();
 
     public static final String JSON_FILE_NAME_EXTRA = "json_filename";
@@ -15,6 +21,7 @@ public abstract class SurveyActivity extends AppCompatActivity {
 
     private RecyclerView recyclerView;
     private SurveyQuestionAdapter mAdapter;
+    private SurveyState mState;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -27,8 +34,9 @@ public abstract class SurveyActivity extends AppCompatActivity {
 
         recyclerView = findViewById(R.id.recycler_view);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        SurveyState state = new SurveyState(surveyQuestions);
-        mAdapter = new SurveyQuestionAdapter(this, state);
+        mState = new SurveyState(surveyQuestions);
+        mState.setValidator(getValidator());
+        mAdapter = new SurveyQuestionAdapter(this, mState);
         recyclerView.setAdapter(mAdapter);
     }
 
@@ -44,5 +52,17 @@ public abstract class SurveyActivity extends AppCompatActivity {
             return getIntent().getStringExtra(JSON_FILE_NAME_EXTRA);
         }
         return null;
+    }
+
+    protected Validator getValidator() {
+        return new DefaultValidator(this, getAnswerProvider());
+    }
+
+    protected AnswerProvider getAnswerProvider() {
+        return mState;
+    }
+
+    public void validationFailed(String message) {
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
     }
 }

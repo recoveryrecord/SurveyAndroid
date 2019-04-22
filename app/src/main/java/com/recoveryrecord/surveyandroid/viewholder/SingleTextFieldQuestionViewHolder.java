@@ -16,23 +16,35 @@ import android.widget.TextView;
 import com.recoveryrecord.surveyandroid.QuestionState;
 import com.recoveryrecord.surveyandroid.R;
 import com.recoveryrecord.surveyandroid.question.SingleTextFieldQuestion;
+import com.recoveryrecord.surveyandroid.question.Validation;
 import com.recoveryrecord.surveyandroid.util.SimpleTextWatcher;
+import com.recoveryrecord.surveyandroid.validation.ValidationResult;
+import com.recoveryrecord.surveyandroid.validation.Validator;
+
+import java.util.ArrayList;
 
 public class SingleTextFieldQuestionViewHolder extends QuestionViewHolder<SingleTextFieldQuestion> {
     private static final String EDIT_TEXT_KEY = "edit_text";
     private static final String ANSWER_ON_EDIT_UPDATE_KEY = "answer_on_edit_update_key";
+
+    private Validator mValidator;
 
     private TextInputLayout answerInputLayout;
     private TextInputEditText answerEdit;
     private TextWatcher editTextWatcher;
     private Button nextButton;
 
-    public SingleTextFieldQuestionViewHolder(Context context, @NonNull View itemView) {
+    public SingleTextFieldQuestionViewHolder(Context context, @NonNull View itemView, Validator validator) {
         super(context, itemView);
+        mValidator = validator;
 
         answerInputLayout = itemView.findViewById(R.id.answer_input_layout);
         answerEdit = itemView.findViewById(R.id.answer_edit);
         nextButton = itemView.findViewById(R.id.next_button);
+    }
+
+    private Validator getValidator() {
+        return mValidator;
     }
 
     public void bind(final SingleTextFieldQuestion question, final QuestionState questionState) {
@@ -60,7 +72,7 @@ public class SingleTextFieldQuestionViewHolder extends QuestionViewHolder<Single
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if (actionId == EditorInfo.IME_ACTION_NEXT) {
-                    onNext(questionState);
+                    onNext(questionState, question.validations);
                     return true;
                 }
                 return false;
@@ -69,7 +81,7 @@ public class SingleTextFieldQuestionViewHolder extends QuestionViewHolder<Single
         nextButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                onNext(questionState);
+                onNext(questionState, question.validations);
             }
         });
     }
@@ -88,9 +100,17 @@ public class SingleTextFieldQuestionViewHolder extends QuestionViewHolder<Single
         nextButton.setOnClickListener(null);
     }
 
-    private void onNext(QuestionState questionState) {
-        // TODO validations
-        questionState.setAnswer(answerEdit.getText().toString());
-        questionState.put(ANSWER_ON_EDIT_UPDATE_KEY, true);
+    private void onNext(QuestionState questionState, ArrayList<Validation> validations) {
+        String answer = answerEdit.getText() != null ? answerEdit.getText().toString() : null;
+        if (getValidator() == null && validations != null && !validations.isEmpty()) {
+            throw new IllegalStateException("No validator available for validations");
+        }
+        ValidationResult validationResult = getValidator().validate(validations, answer);
+        if (validationResult.isValid) {
+            questionState.setAnswer(answer);
+            questionState.put(ANSWER_ON_EDIT_UPDATE_KEY, true);
+        } else {
+            getValidator().validationFailed(validationResult.failedMessage);
+        }
     }
 }
