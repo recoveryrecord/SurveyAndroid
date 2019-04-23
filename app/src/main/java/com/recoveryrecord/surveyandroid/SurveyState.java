@@ -6,7 +6,9 @@ import com.recoveryrecord.surveyandroid.question.Question;
 import com.recoveryrecord.surveyandroid.validation.AnswerProvider;
 import com.recoveryrecord.surveyandroid.validation.Validator;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 // Tracks the current state of our survey.
@@ -16,6 +18,7 @@ public class SurveyState implements OnQuestionStateChangedListener, AnswerProvid
     private Map<String, QuestionState> mQuestionStateMap;
     private Validator mValidator;
     private ConditionEvaluator mConditionEvaluator;
+    private List<OnSurveyStateChangedListener> mSurveyStateListeners = new ArrayList<>();
 
     private int mVisibleQuestionCount = 1;
 
@@ -42,8 +45,7 @@ public class SurveyState implements OnQuestionStateChangedListener, AnswerProvid
     }
 
     public Integer getVisibleQuestionCount() {
-        //return mVisibleQuestionCount;
-        return mSurveyQuestions.size();
+        return mVisibleQuestionCount;
     }
 
     public Question getQuestionFor(int position) {
@@ -68,12 +70,47 @@ public class SurveyState implements OnQuestionStateChangedListener, AnswerProvid
     @Override
     public void questionAnswered(QuestionState newQuestionState) {
         mQuestionStateMap.put(newQuestionState.id(), newQuestionState);
-        // TODO: changes for answered
+        if (newQuestionState.id().equals(getQuestionFor(mVisibleQuestionCount - 1).id)) {
+            increaseVisibleQuestionCount();
+        }
     }
 
     @Override
     public Answer answerFor(String questionId) {
         QuestionState questionState = getStateFor(questionId);
         return questionState.getAnswer();
+    }
+
+    public void increaseVisibleQuestionCount() {
+        if (mVisibleQuestionCount <= mSurveyQuestions.size()) {
+            mVisibleQuestionCount += 1;
+            questionInserted(mVisibleQuestionCount - 1);
+        }
+    }
+
+    public void addOnSurveyStateChangedListener(OnSurveyStateChangedListener listener) {
+        mSurveyStateListeners.add(listener);
+    }
+
+    public void removeOnSurveyStateChangedListener(OnSurveyStateChangedListener listener) {
+        mSurveyStateListeners.remove(listener);
+    }
+
+    private void questionInserted(int adapterPosition) {
+        for (OnSurveyStateChangedListener listener : mSurveyStateListeners) {
+            listener.questionInserted(adapterPosition);
+        }
+    }
+
+    public void questionRemoved(int adapterPosition) {
+        for (OnSurveyStateChangedListener listener : mSurveyStateListeners) {
+            listener.questionRemoved(adapterPosition);
+        }
+    }
+
+    public void submitButtonInserted(int adapterPosition) {
+        for (OnSurveyStateChangedListener listener : mSurveyStateListeners) {
+            listener.submitButtonInserted(adapterPosition);
+        }
     }
 }
