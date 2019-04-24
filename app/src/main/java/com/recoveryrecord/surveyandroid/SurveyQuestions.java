@@ -9,6 +9,7 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.recoveryrecord.surveyandroid.question.Question;
 import com.recoveryrecord.surveyandroid.question.QuestionsWrapper;
+import com.recoveryrecord.surveyandroid.question.QuestionsWrapper.SubmitData;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -19,14 +20,15 @@ public class SurveyQuestions {
 
     private Context mContext;
     private ArrayList<Question> mQuestions;
+    private SubmitData mSubmitData;
 
     public static SurveyQuestions load(Context context, String jsonFileName) {
-        ArrayList<Question> questions = readQuestionsFromFile(context, jsonFileName);
-        return new SurveyQuestions(context, questions);
+        return createSurveyQuestionsFromFile(context, jsonFileName);
     }
 
-    public static ArrayList<Question> readQuestionsFromFile(Context context, String jsonFileName) {
+    public static SurveyQuestions createSurveyQuestionsFromFile(Context context, String jsonFileName) {
         ArrayList<Question> questions = new ArrayList<>();
+        SubmitData submitData = null;
         AssetManager assetManager = context.getAssets();
         ObjectMapper mapper = new ObjectMapper()
                 .enable(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY)
@@ -37,20 +39,29 @@ public class SurveyQuestions {
             if (wrapper.questions != null) {
                 questions = wrapper.questions;
             }
+            submitData = wrapper.submit;
             inputStream.close();
         } catch (IOException ioe) {
             Log.e(TAG, "Error while parsing " + jsonFileName, ioe);
         }
-        return questions;
+        return new SurveyQuestions(context, questions, submitData);
     }
 
-    public SurveyQuestions(Context context, ArrayList<Question> questions) {
+    public SurveyQuestions(Context context, ArrayList<Question> questions, SubmitData submitData) {
         mContext = context;
         mQuestions = questions;
+        mSubmitData = submitData;
     }
 
     public Question getQuestionFor(int position) {
+        if (position >= mQuestions.size()) {
+            return null;
+        }
         return mQuestions.get(position);
+    }
+
+    public SubmitData getSubmitData() {
+        return mSubmitData;
     }
 
     public int size() {

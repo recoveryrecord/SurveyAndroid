@@ -1,8 +1,12 @@
 package com.recoveryrecord.surveyandroid;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.recoveryrecord.surveyandroid.condition.ConditionEvaluator;
 import com.recoveryrecord.surveyandroid.condition.CustomConditionHandler;
 import com.recoveryrecord.surveyandroid.question.Question;
+import com.recoveryrecord.surveyandroid.question.QuestionsWrapper.SubmitData;
 import com.recoveryrecord.surveyandroid.validation.AnswerProvider;
 import com.recoveryrecord.surveyandroid.validation.Validator;
 
@@ -18,9 +22,12 @@ public class SurveyState implements OnQuestionStateChangedListener, AnswerProvid
     private Map<String, QuestionState> mQuestionStateMap;
     private Validator mValidator;
     private ConditionEvaluator mConditionEvaluator;
+    private SubmitSurveyHandler mSubmitSurveyHandler;
     private List<OnSurveyStateChangedListener> mSurveyStateListeners = new ArrayList<>();
 
     private int mVisibleQuestionCount = 1;
+
+    private ObjectMapper mObjectMapper;
 
     public SurveyState(SurveyQuestions surveyQuestions) {
         mSurveyQuestions = surveyQuestions;
@@ -44,12 +51,24 @@ public class SurveyState implements OnQuestionStateChangedListener, AnswerProvid
         return mConditionEvaluator;
     }
 
+    public void setSubmitSurveyHandler(SubmitSurveyHandler submitSurveyHandler) {
+        mSubmitSurveyHandler = submitSurveyHandler;
+    }
+
+    protected SubmitSurveyHandler getSubmitSurveyHandler() {
+        return mSubmitSurveyHandler;
+    }
+
     public Integer getVisibleQuestionCount() {
         return mVisibleQuestionCount;
     }
 
     public Question getQuestionFor(int position) {
         return mSurveyQuestions.getQuestionFor(position);
+    }
+
+    public boolean isSubmitPosition(int adapterPosition) {
+        return mSurveyQuestions.size() == adapterPosition;
     }
 
     public QuestionState getStateFor(String questionId) {
@@ -70,7 +89,8 @@ public class SurveyState implements OnQuestionStateChangedListener, AnswerProvid
     @Override
     public void questionAnswered(QuestionState newQuestionState) {
         mQuestionStateMap.put(newQuestionState.id(), newQuestionState);
-        if (newQuestionState.id().equals(getQuestionFor(mVisibleQuestionCount - 1).id)) {
+        Question lastQuestion = getQuestionFor(mVisibleQuestionCount - 1);
+        if (lastQuestion != null && newQuestionState.id().equals(lastQuestion.id)) {
             increaseVisibleQuestionCount();
         }
     }
@@ -81,9 +101,49 @@ public class SurveyState implements OnQuestionStateChangedListener, AnswerProvid
         return questionState.getAnswer();
     }
 
+    @Override
+    public String allAnswersJson() {
+        ObjectNode topNode = getObjectMapper().createObjectNode();
+        ObjectNode answersNode = getObjectMapper().createObjectNode();
+        for (String questionId : mQuestionStateMap.keySet()) {
+            answersNode = putAnswer(answersNode, questionId, answerFor(questionId));
+        }
+        topNode.set("answers", answersNode);
+        return topNode.toString();
+    }
+
+    private ObjectMapper getObjectMapper() {
+        if (mObjectMapper == null) {
+            mObjectMapper = new ObjectMapper();
+        }
+        return mObjectMapper;
+    }
+
+    private ObjectNode putAnswer(ObjectNode objectNode, String key, Answer answer) {
+        if (answer.isString()) {
+            objectNode.put(key, answer.getValue());
+        } else if (answer.isList()) {
+            ArrayList<String> answersList = answer.getValueList();
+            ArrayNode answerListNode = objectNode.putArray(key);
+            for (String answerStr : answersList) {
+                answerListNode.add(answerStr);
+            }
+        } else {
+            for (String valueKey: answer.getValueMap().keySet()) {
+                ObjectNode valueObject = getObjectMapper().createObjectNode();
+                valueObject = putAnswer(valueObject, valueKey, answer.getValueMap().get(valueKey));
+                objectNode.set(key, valueObject);
+            }
+        }
+        return objectNode;
+    }
+
+    public SubmitData getSubmitData() {
+        return mSurveyQuestions.getSubmitData();
+    }
+
     public void increaseVisibleQuestionCount() {
-        // We may change this max depending on how the submit button is done
-        if (mVisibleQuestionCount <= mSurveyQuestions.size() - 1) {
+        if (mVisibleQuestionCount <= mSurveyQuestions.size()) {
             mVisibleQuestionCount += 1;
             questionInserted(mVisibleQuestionCount - 1);
         }

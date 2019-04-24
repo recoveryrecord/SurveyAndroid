@@ -90,4 +90,14 @@
 
     <style name="Widget.SurveyAndroid.SegmentTag" />
 
+    <style name="Widget.SurveyAndroid.SubmitSpacer">
+        <item name="android:layout_height">20dp</item>
+        <item name="android:layout_width">match_parent</item>
+    </style>
+
+    <style name="Widget.SurveyAndroid.SubmitButton" parent="Base.Widget.AppCompat.Button.Borderless">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
+
 </resources>

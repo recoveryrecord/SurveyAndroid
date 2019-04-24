@@ -46,6 +46,8 @@ public abstract class SurveyActivity extends AppCompatActivity implements Failed
         recyclerView.setItemAnimator(new SurveyQuestionItemAnimator());
         mState = new SurveyState(surveyQuestions);
         mState.setValidator(getValidator());
+        mState.setCustomConditionHandler(getCustomConditionHandler());
+        mState.setSubmitSurveyHandler(getSubmitSurveyHandler());
         mAdapter = new SurveyQuestionAdapter(this, mState);
         recyclerView.setAdapter(mAdapter);
         mSmoothScroller = new LinearSmoothScroller(this) {
@@ -102,6 +104,10 @@ public abstract class SurveyActivity extends AppCompatActivity implements Failed
 
     public void validationFailed(String message) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+    }
+
+    public SubmitSurveyHandler getSubmitSurveyHandler() {
+        return new DefaultSubmitSurveyHandler(this);
     }
 
     @Override
