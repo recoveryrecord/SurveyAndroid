@@ -3,14 +3,18 @@ package com.recoveryrecord.surveyandroid.viewholder;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.text.Editable;
+import android.text.InputType;
 import android.text.TextWatcher;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.recoveryrecord.surveyandroid.Answer;
 import com.recoveryrecord.surveyandroid.QuestionState;
@@ -18,6 +22,7 @@ import com.recoveryrecord.surveyandroid.R;
 import com.recoveryrecord.surveyandroid.question.MultiSelectQuestion;
 import com.recoveryrecord.surveyandroid.question.Option;
 import com.recoveryrecord.surveyandroid.question.OtherOption;
+import com.recoveryrecord.surveyandroid.util.KeyboardUtil;
 import com.recoveryrecord.surveyandroid.util.SimpleTextWatcher;
 
 import java.util.ArrayList;
@@ -26,12 +31,12 @@ import java.util.Map;
 
 public class MultiSelectQuestionViewHolder extends QuestionViewHolder<MultiSelectQuestion> {
     private static final String CHECKED_TITLES_KEY = "checked_titles";
-    private static final String ANSWER_ON_CHECK_CHANGE_KEY = "answer_on_check_change_key";
+    private static final String HAS_BEEN_ANSWERED_KEY = "has_been_answered_key";
     private static final String EDIT_TEXT_KEY = "%s_edit_text_key";
 
     private ViewGroup answerCheckboxContainer;
     private Button nextButton;
-    private Map<String, View> otherMap = new HashMap<>();
+    private Map<String, OtherView> otherMap = new HashMap<>();
 
     public MultiSelectQuestionViewHolder(Context context, @NonNull View itemView) {
         super(context, itemView);
@@ -52,34 +57,49 @@ public class MultiSelectQuestionViewHolder extends QuestionViewHolder<MultiSelec
                 @Override
                 public void afterTextChanged(Editable s) {
                     questionState.put(getEditTextKey(option.title), s.toString());
-                    if (questionState.getBool(ANSWER_ON_CHECK_CHANGE_KEY, false)) {
+                    if (hasBeenAnswered(questionState)) {
                         onNext(questionState);
                     }
                 }
             };
             answerCheckboxContainer.addView(checkBox);
             if (option instanceof OtherOption) {
-                View otherSection = layoutInflater.inflate(R.layout.view_other_multi_select, answerCheckboxContainer, false);
-                EditText editText = otherSection.findViewById(R.id.edit_other);
-                editText.addTextChangedListener(editTextWatcher);
-                otherSection.setVisibility(checkedTitles.contains(option.title) ? View.VISIBLE : View.GONE);
-                editText.setText(questionState.getString(getEditTextKey(option.title)));
-                answerCheckboxContainer.addView(otherSection);
-                otherMap.put(checkBox.getText().toString(), otherSection);
+                OtherView otherView = new OtherView(layoutInflater.inflate(R.layout.view_other_multi_select, answerCheckboxContainer, false));
+                otherView.editText.setInputType(((OtherOption) option).type.equals("number") ? InputType.TYPE_CLASS_NUMBER : InputType.TYPE_CLASS_TEXT);
+                otherView.editText.addTextChangedListener(editTextWatcher);
+                otherView.setVisibility(checkedTitles.contains(option.title) ? View.VISIBLE : View.GONE);
+                otherView.editText.setText(questionState.getString(getEditTextKey(option.title)));
+                otherView.editText.setImeOptions(EditorInfo.IME_ACTION_NEXT);
+                otherView.editText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+                    @Override
+                    public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                        if (actionId == EditorInfo.IME_ACTION_NEXT) {
+                            onNext(questionState);
+                            return true;
+                        }
+                        return false;
+                    }
+                });
+                answerCheckboxContainer.addView(otherView.otherSection);
+                otherMap.put(checkBox.getText().toString(), otherView);
             }
             checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                    View otherSection = otherMap.get(buttonView.getText().toString());
-                    if (otherSection != null) {
-                        otherSection.setVisibility(isChecked ? View.VISIBLE : View.GONE);
+                    OtherView otherView = otherMap.get(buttonView.getText().toString());
+                    if (otherView != null) {
+                        otherView.setVisibility(isChecked ? View.VISIBLE : View.GONE);
+                        if (isChecked) {
+                            otherView.editText.requestFocus();
+                            KeyboardUtil.showKeyboard(getContext(), otherView.editText);
+                        }
                     }
                     if (isChecked) {
                         questionState.addStringToList(CHECKED_TITLES_KEY, buttonView.getText().toString());
                     } else {
                         questionState.removeStringFromList(CHECKED_TITLES_KEY, buttonView.getText().toString());
                     }
-                    if (questionState.getBool(ANSWER_ON_CHECK_CHANGE_KEY, false)) {
+                    if (hasBeenAnswered(questionState)) {
                         onNext(questionState);
                     }
                 }
@@ -102,10 +122,9 @@ public class MultiSelectQuestionViewHolder extends QuestionViewHolder<MultiSelec
         for (int i = 0; i < answerCheckboxContainer.getChildCount(); i++) {
             View child = answerCheckboxContainer.getChildAt(i);
             if (child instanceof CheckBox && ((CheckBox) child).isChecked()) {
-                View otherSection = otherMap.get(((CheckBox) child).getText().toString());
-                if (otherSection != null) {
-                    EditText editText = otherSection.findViewById(R.id.edit_other);
-                    checkedTitles.add(editText.getText().toString());
+                OtherView otherView = otherMap.get(((CheckBox) child).getText().toString());
+                if (otherView != null) {
+                    checkedTitles.add(otherView.editText.getText().toString());
                 } else {
                     checkedTitles.add(((CheckBox) child).getText().toString());
                 }
@@ -124,6 +143,30 @@ public class MultiSelectQuestionViewHolder extends QuestionViewHolder<MultiSelec
 
     private void onNext(QuestionState questionState) {
         questionState.setAnswer(new Answer(getSelectedCheckboxTitles()));
-        questionState.put(ANSWER_ON_CHECK_CHANGE_KEY, true);
+        setHasBeenAnswered(questionState);
+        KeyboardUtil.hideKeyboard(getContext(), answerCheckboxContainer);
+    }
+
+    // Returns true if the answer for this has been set before
+    private boolean hasBeenAnswered(QuestionState questionState) {
+        return questionState.getBool(HAS_BEEN_ANSWERED_KEY, false);
+    }
+
+    private void setHasBeenAnswered(QuestionState questionState) {
+        questionState.put(HAS_BEEN_ANSWERED_KEY, true);
+    }
+
+    private class OtherView {
+        View otherSection;
+        EditText editText;
+
+        OtherView(View otherSection) {
+            this.otherSection = otherSection;
+            this.editText = otherSection.findViewById(R.id.edit_other);
+        }
+
+        void setVisibility(int visibility) {
+            otherSection.setVisibility(visibility);
+        }
     }
 }

@@ -14,6 +14,7 @@ import com.recoveryrecord.surveyandroid.QuestionState;
 import com.recoveryrecord.surveyandroid.R;
 import com.recoveryrecord.surveyandroid.question.SingleTextAreaQuestion;
 import com.recoveryrecord.surveyandroid.question.Validation;
+import com.recoveryrecord.surveyandroid.util.KeyboardUtil;
 import com.recoveryrecord.surveyandroid.util.SimpleTextWatcher;
 import com.recoveryrecord.surveyandroid.validation.ValidationResult;
 import com.recoveryrecord.surveyandroid.validation.Validator;
@@ -22,7 +23,7 @@ import java.util.ArrayList;
 
 public class SingleTextAreaQuestionViewHolder extends QuestionViewHolder<SingleTextAreaQuestion> {
     private static final String EDIT_TEXT_KEY = "edit_text";
-    private static final String ANSWER_ON_EDIT_UPDATE_KEY = "answer_on_edit_update_key";
+    private static final String HAS_BEEN_ANSWERED_KEY = "has_been_answered_key";
 
     private Validator mValidator;
 
@@ -55,7 +56,7 @@ public class SingleTextAreaQuestionViewHolder extends QuestionViewHolder<SingleT
             @Override
             public void afterTextChanged(Editable s) {
                 questionState.put(EDIT_TEXT_KEY, s.toString());
-                if (questionState.getBool(ANSWER_ON_EDIT_UPDATE_KEY, false)) {
+                if (hasBeenAnswered(questionState)) {
                     questionState.setAnswer(new Answer(s.toString()));
                 }
             }
@@ -67,6 +68,10 @@ public class SingleTextAreaQuestionViewHolder extends QuestionViewHolder<SingleT
                 onNext(questionState, singleTextAreaQuestion.validations);
             }
         });
+        if (!hasBeenAnswered(questionState)) {
+            answerEdit.requestFocus();
+            KeyboardUtil.showKeyboardDelayed(getContext(), answerEdit, 500L);
+        }
     }
 
     @Override
@@ -90,9 +95,22 @@ public class SingleTextAreaQuestionViewHolder extends QuestionViewHolder<SingleT
                 getValidator().validate(validations, answerStr);
         if (validationResult.isValid) {
             questionState.setAnswer(new Answer(answerStr));
-            questionState.put(ANSWER_ON_EDIT_UPDATE_KEY, true);
+            setHasBeenAnswered(questionState);
+            answerEdit.clearFocus();
+            KeyboardUtil.hideKeyboard(getContext(), answerEdit);
         } else {
             getValidator().validationFailed(validationResult.failedMessage);
+            answerEdit.requestFocus();
+            KeyboardUtil.showKeyboard(getContext(), answerEdit);
         }
+    }
+
+    // Returns true if the answer for this has been set before
+    private boolean hasBeenAnswered(QuestionState questionState) {
+        return questionState.getBool(HAS_BEEN_ANSWERED_KEY, false);
+    }
+
+    private void setHasBeenAnswered(QuestionState questionState) {
+        questionState.put(HAS_BEEN_ANSWERED_KEY, true);
     }
 }

@@ -82,7 +82,8 @@ public class SurveyState implements OnQuestionStateChangedListener, AnswerProvid
     }
 
     public void increaseVisibleQuestionCount() {
-        if (mVisibleQuestionCount <= mSurveyQuestions.size()) {
+        // We may change this max depending on how the submit button is done
+        if (mVisibleQuestionCount <= mSurveyQuestions.size() - 1) {
             mVisibleQuestionCount += 1;
             questionInserted(mVisibleQuestionCount - 1);
         }

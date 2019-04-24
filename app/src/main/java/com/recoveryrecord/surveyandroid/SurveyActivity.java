@@ -56,7 +56,7 @@ public abstract class SurveyActivity extends AppCompatActivity implements Failed
 
             @Override
             protected float calculateSpeedPerPixel(DisplayMetrics displayMetrics) {
-                return 60F  / (float)displayMetrics.densityDpi;
+                return 100F  / (float)displayMetrics.densityDpi;
             }
         };
     }
@@ -112,7 +112,13 @@ public abstract class SurveyActivity extends AppCompatActivity implements Failed
         }
         mAdapter.notifyItemInserted(adapterPosition);
         mSmoothScroller.setTargetPosition(adapterPosition);
-        mLayoutManager.startSmoothScroll(mSmoothScroller);
+        // This ensures that the keyboard finishes hiding before we start scrolling
+        recyclerView.post(new Runnable() {
+            @Override
+            public void run() {
+                mLayoutManager.startSmoothScroll(mSmoothScroller);
+            }
+        });
     }
 
     @Override
