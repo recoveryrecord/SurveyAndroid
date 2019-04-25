@@ -37,6 +37,7 @@ public class MultiSelectQuestionViewHolder extends QuestionViewHolder<MultiSelec
     private ViewGroup answerCheckboxContainer;
     private Button nextButton;
     private Map<String, OtherView> otherMap = new HashMap<>();
+    TextWatcher mEditTextWatcher;
 
     public MultiSelectQuestionViewHolder(Context context, @NonNull View itemView) {
         super(context, itemView);
@@ -53,7 +54,7 @@ public class MultiSelectQuestionViewHolder extends QuestionViewHolder<MultiSelec
             final CheckBox checkBox = new CheckBox(getContext());
             checkBox.setText(option.title);
             checkBox.setChecked(checkedTitles.contains(option.title));
-            TextWatcher editTextWatcher = new SimpleTextWatcher() {
+            mEditTextWatcher = new SimpleTextWatcher() {
                 @Override
                 public void afterTextChanged(Editable s) {
                     questionState.put(getEditTextKey(option.title), s.toString());
@@ -66,7 +67,6 @@ public class MultiSelectQuestionViewHolder extends QuestionViewHolder<MultiSelec
             if (option instanceof OtherOption) {
                 OtherView otherView = new OtherView(layoutInflater.inflate(R.layout.view_other_multi_select, answerCheckboxContainer, false));
                 otherView.editText.setInputType(((OtherOption) option).type.equals("number") ? InputType.TYPE_CLASS_NUMBER : InputType.TYPE_CLASS_TEXT);
-                otherView.editText.addTextChangedListener(editTextWatcher);
                 otherView.setVisibility(checkedTitles.contains(option.title) ? View.VISIBLE : View.GONE);
                 otherView.editText.setText(questionState.getString(getEditTextKey(option.title)));
                 otherView.editText.setImeOptions(EditorInfo.IME_ACTION_NEXT);
@@ -80,6 +80,7 @@ public class MultiSelectQuestionViewHolder extends QuestionViewHolder<MultiSelec
                         return false;
                     }
                 });
+                otherView.editText.addTextChangedListener(mEditTextWatcher);
                 answerCheckboxContainer.addView(otherView.otherSection);
                 otherMap.put(checkBox.getText().toString(), otherView);
             }
@@ -117,17 +118,19 @@ public class MultiSelectQuestionViewHolder extends QuestionViewHolder<MultiSelec
         return String.format(EDIT_TEXT_KEY, title);
     }
 
-    private ArrayList<String> getSelectedCheckboxTitles() {
+    private ArrayList<String> getCheckboxAnswers() {
         ArrayList<String> checkedTitles = new ArrayList<>();
         for (int i = 0; i < answerCheckboxContainer.getChildCount(); i++) {
             View child = answerCheckboxContainer.getChildAt(i);
-            if (child instanceof CheckBox && ((CheckBox) child).isChecked()) {
-                OtherView otherView = otherMap.get(((CheckBox) child).getText().toString());
-                if (otherView != null) {
-                    checkedTitles.add(otherView.editText.getText().toString());
-                } else {
-                    checkedTitles.add(((CheckBox) child).getText().toString());
-                }
+            if (!(child instanceof CheckBox) || !((CheckBox) child).isChecked()) {
+                continue;
+            }
+            String checkboxTitle = ((CheckBox) child).getText().toString();
+            OtherView otherView = otherMap.get(checkboxTitle);
+            if (otherView != null) {
+                checkedTitles.add(otherView.editText.getText().toString());
+            } else {
+                checkedTitles.add(checkboxTitle);
             }
         }
         return checkedTitles;
@@ -137,12 +140,18 @@ public class MultiSelectQuestionViewHolder extends QuestionViewHolder<MultiSelec
     protected void resetState() {
         super.resetState();
         answerCheckboxContainer.removeAllViews();
+        for (OtherView otherView : otherMap.values()) {
+            if (mEditTextWatcher != null) {
+                otherView.editText.removeTextChangedListener(mEditTextWatcher);
+            }
+            otherView.editText.setOnEditorActionListener(null);
+        }
         otherMap.clear();
         nextButton.setOnClickListener(null);
     }
 
     private void onNext(QuestionState questionState) {
-        questionState.setAnswer(new Answer(getSelectedCheckboxTitles()));
+        questionState.setAnswer(new Answer(getCheckboxAnswers()));
         setHasBeenAnswered(questionState);
         KeyboardUtil.hideKeyboard(getContext(), answerCheckboxContainer);
     }
