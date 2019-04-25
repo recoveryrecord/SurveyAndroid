@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.LinearSmoothScroller;
 import android.support.v7.widget.RecyclerView;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -16,17 +15,15 @@ import com.recoveryrecord.surveyandroid.validation.DefaultValidator;
 import com.recoveryrecord.surveyandroid.validation.FailedValidationListener;
 import com.recoveryrecord.surveyandroid.validation.Validator;
 
-public abstract class SurveyActivity extends AppCompatActivity implements FailedValidationListener, OnSurveyStateChangedListener {
+public abstract class SurveyActivity extends AppCompatActivity implements FailedValidationListener {
     private static final String TAG = SurveyActivity.class.getSimpleName();
 
     public static final String JSON_FILE_NAME_EXTRA = "json_filename";
     public static final String SURVEY_TITLE_EXTRA = "survey_title";
 
-    private RecyclerView recyclerView;
-    private SurveyQuestionAdapter mAdapter;
-    private LinearLayoutManager mLayoutManager;
     private SurveyState mState;
-    private LinearSmoothScroller mSmoothScroller;
+    private OnSurveyStateChangedListener mOnSurveyStateChangedListener;
+    private RecyclerView mRecyclerView;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -37,42 +34,33 @@ public abstract class SurveyActivity extends AppCompatActivity implements Failed
         SurveyQuestions surveyQuestions = SurveyQuestions.load(this, getJsonFilename());
         Log.d(TAG, "Questions = " + surveyQuestions);
 
-        recyclerView = findViewById(R.id.recycler_view);
-        mLayoutManager = new LinearLayoutManager(this);
-        recyclerView.setLayoutManager(mLayoutManager);
+        mRecyclerView = findViewById(R.id.recycler_view);
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        mRecyclerView.addItemDecoration(new SpaceOnLastItemDecoration(getDisplayHeightPixels()));
+        mRecyclerView.setItemAnimator(new SurveyQuestionItemAnimator());
+        mState = new SurveyState(surveyQuestions)
+                .setValidator(getValidator())
+                .setCustomConditionHandler(getCustomConditionHandler())
+                .setSubmitSurveyHandler(getSubmitSurveyHandler());
+        mRecyclerView.setAdapter(new SurveyQuestionAdapter(this, mState));
+    }
+
+    private int getDisplayHeightPixels() {
         DisplayMetrics displayMetrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
-        recyclerView.addItemDecoration(new SpaceOnLastItemDecoration(displayMetrics.heightPixels));
-        recyclerView.setItemAnimator(new SurveyQuestionItemAnimator());
-        mState = new SurveyState(surveyQuestions);
-        mState.setValidator(getValidator());
-        mState.setCustomConditionHandler(getCustomConditionHandler());
-        mState.setSubmitSurveyHandler(getSubmitSurveyHandler());
-        mAdapter = new SurveyQuestionAdapter(this, mState);
-        recyclerView.setAdapter(mAdapter);
-        mSmoothScroller = new LinearSmoothScroller(this) {
-            @Override
-            protected int getVerticalSnapPreference() {
-                return LinearSmoothScroller.SNAP_TO_START;
-            }
-
-            @Override
-            protected float calculateSpeedPerPixel(DisplayMetrics displayMetrics) {
-                return 100F  / (float)displayMetrics.densityDpi;
-            }
-        };
+        return displayMetrics.heightPixels;
     }
 
     @Override
     protected void onStart() {
         super.onStart();
-        mState.addOnSurveyStateChangedListener(this);
+        mState.addOnSurveyStateChangedListener(getOnSurveyStateChangedListener());
     }
 
     @Override
     protected void onStop() {
         super.onStop();
-        mState.removeOnSurveyStateChangedListener(this);
+        mState.removeOnSurveyStateChangedListener(getOnSurveyStateChangedListener());
     }
 
     protected String getSurveyTitle() {
@@ -90,7 +78,7 @@ public abstract class SurveyActivity extends AppCompatActivity implements Failed
     }
 
     protected Validator getValidator() {
-        return new DefaultValidator(this, getAnswerProvider());
+        return new DefaultValidator(this);
     }
 
     // Subclasses should return a non-null if they are using custom show_if conditions.
@@ -110,38 +98,18 @@ public abstract class SurveyActivity extends AppCompatActivity implements Failed
         return new DefaultSubmitSurveyHandler(this);
     }
 
-    @Override
-    public void questionInserted(final int adapterPosition) {
-        if (adapterPosition > 0) {
-            // This fixes the ItemDecoration "footer"
-            mAdapter.notifyItemChanged(adapterPosition - 1, Boolean.FALSE);
-        }
-        mAdapter.notifyItemInserted(adapterPosition);
-        mSmoothScroller.setTargetPosition(adapterPosition);
-        // This ensures that the keyboard finishes hiding before we start scrolling
-        recyclerView.post(new Runnable() {
-            @Override
-            public void run() {
-                mLayoutManager.startSmoothScroll(mSmoothScroller);
-            }
-        });
+    public RecyclerView getRecyclerView() {
+        return mRecyclerView;
     }
 
-    @Override
-    public void questionRemoved(int adapterPosition) {
-        if (adapterPosition > 0) {
-            // This fixes the ItemDecoration "footer"
-            mAdapter.notifyItemChanged(adapterPosition - 1, Boolean.FALSE);
+    public OnSurveyStateChangedListener getOnSurveyStateChangedListener() {
+        if (mOnSurveyStateChangedListener == null) {
+            mOnSurveyStateChangedListener = new DefaultOnSurveyStateChangedListener(this, getRecyclerView());
         }
-        mAdapter.notifyItemRemoved(adapterPosition);
+        return mOnSurveyStateChangedListener;
     }
 
-    @Override
-    public void submitButtonInserted(int adapterPosition) {
-        if (adapterPosition > 0) {
-            // This fixes the ItemDecoration "footer"
-            mAdapter.notifyItemChanged(adapterPosition - 1, Boolean.FALSE);
-        }
-        mAdapter.notifyItemInserted(adapterPosition);
+    public void setOnSurveyStateChangedListener(OnSurveyStateChangedListener listener) {
+        mOnSurveyStateChangedListener = listener;
     }
 }

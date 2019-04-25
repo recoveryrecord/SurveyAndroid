@@ -20,6 +20,7 @@ import com.recoveryrecord.surveyandroid.question.SingleTextFieldQuestion;
 import com.recoveryrecord.surveyandroid.question.Validation;
 import com.recoveryrecord.surveyandroid.util.KeyboardUtil;
 import com.recoveryrecord.surveyandroid.util.SimpleTextWatcher;
+import com.recoveryrecord.surveyandroid.validation.AnswerProvider;
 import com.recoveryrecord.surveyandroid.validation.ValidationResult;
 import com.recoveryrecord.surveyandroid.validation.Validator;
 
@@ -30,15 +31,17 @@ public class SingleTextFieldQuestionViewHolder extends QuestionViewHolder<Single
     private static final String HAS_BEEN_ANSWERED_KEY = "has_been_answered_key";
 
     private Validator mValidator;
+    private AnswerProvider mAnswerProvider;
 
     private TextInputLayout answerInputLayout;
     private TextInputEditText answerEdit;
     private TextWatcher editTextWatcher;
     private Button nextButton;
 
-    public SingleTextFieldQuestionViewHolder(Context context, @NonNull View itemView, Validator validator) {
+    public SingleTextFieldQuestionViewHolder(Context context, @NonNull View itemView, Validator validator, AnswerProvider answerProvider) {
         super(context, itemView);
         mValidator = validator;
+        mAnswerProvider = answerProvider;
 
         answerInputLayout = itemView.findViewById(R.id.answer_input_layout);
         answerEdit = itemView.findViewById(R.id.answer_edit);
@@ -113,7 +116,7 @@ public class SingleTextFieldQuestionViewHolder extends QuestionViewHolder<Single
         }
         ValidationResult validationResult = getValidator() == null ?
                 ValidationResult.success() :
-                getValidator().validate(validations, answerStr);
+                getValidator().validate(validations, answerStr, mAnswerProvider);
         if (validationResult.isValid) {
             questionState.setAnswer(new Answer(answerStr));
             setHasBeenAnswered(questionState);

@@ -35,24 +35,27 @@ public class SurveyState implements OnQuestionStateChangedListener, AnswerProvid
         mConditionEvaluator = new ConditionEvaluator(this);
     }
 
-    public void setValidator(Validator validator) {
+    public SurveyState setValidator(Validator validator) {
         mValidator = validator;
+        return this;
     }
 
     protected Validator getValidator() {
         return mValidator;
     }
 
-    public void setCustomConditionHandler(CustomConditionHandler handler) {
+    public SurveyState setCustomConditionHandler(CustomConditionHandler handler) {
         mConditionEvaluator.setCustomConditionHandler(handler);
+        return this;
     }
 
     public ConditionEvaluator getConditionEvaluator() {
         return mConditionEvaluator;
     }
 
-    public void setSubmitSurveyHandler(SubmitSurveyHandler submitSurveyHandler) {
+    public SurveyState setSubmitSurveyHandler(SubmitSurveyHandler submitSurveyHandler) {
         mSubmitSurveyHandler = submitSurveyHandler;
+        return this;
     }
 
     protected SubmitSurveyHandler getSubmitSurveyHandler() {

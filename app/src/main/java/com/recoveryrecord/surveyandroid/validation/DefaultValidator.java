@@ -7,20 +7,18 @@ import java.util.Map;
 
 public class DefaultValidator implements Validator {
     private FailedValidationListener mListener;
-    private AnswerProvider mAnswerProvider;
 
-    public DefaultValidator(FailedValidationListener failedValidationListener, AnswerProvider answerProvider) {
+    public DefaultValidator(FailedValidationListener failedValidationListener) {
         mListener = failedValidationListener;
-        mAnswerProvider = answerProvider;
     }
 
     @Override
-    public ValidationResult validate(List<Validation> validations, String answer) {
+    public ValidationResult validate(List<Validation> validations, String answer, AnswerProvider answerProvider) {
         if (validations == null || validations.isEmpty()) {
             return ValidationResult.success();
         }
         for (Validation validation : validations) {
-            if (!isConditionMet(validation, answer)) {
+            if (!isConditionMet(validation, answer, answerProvider)) {
                 return new ValidationResult(false, validation.onFailMessage);
             }
         }
@@ -28,7 +26,7 @@ public class DefaultValidator implements Validator {
     }
 
     @Override
-    public ValidationResult validate(List<Validation> validations, Map<String, String> answers) {
+    public ValidationResult validate(List<Validation> validations, Map<String, String> answers, AnswerProvider answerProvider) {
         if (validations == null || validations.isEmpty()) {
             return ValidationResult.success();
         }
@@ -37,20 +35,20 @@ public class DefaultValidator implements Validator {
             if (answer == null) {
                 continue;
             }
-            if (!isConditionMet(validation, answer)) {
+            if (!isConditionMet(validation, answer, answerProvider)) {
                 return new ValidationResult(false, validation.onFailMessage);
             }
         }
         return ValidationResult.success();
     }
 
-    private boolean isConditionMet(Validation validation, String answer) {
+    private boolean isConditionMet(Validation validation, String answer, AnswerProvider answerProvider) {
         Double value = validation.value;
         if (validation.answerToQuestionId != null) {
-            if (mAnswerProvider == null) {
+            if (answerProvider == null) {
                 throw new IllegalStateException("Validation requires a non-null AnswerProvider");
             }
-            value = Double.parseDouble(mAnswerProvider.answerFor(validation.answerToQuestionId).getValue());
+            value = Double.parseDouble(answerProvider.answerFor(validation.answerToQuestionId).getValue());
         }
         Double numAnswer = Double.parseDouble(answer);
         switch (validation.operation) {
