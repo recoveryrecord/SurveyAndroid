@@ -7,7 +7,6 @@ import com.recoveryrecord.surveyandroid.condition.ConditionEvaluator;
 import com.recoveryrecord.surveyandroid.condition.CustomConditionHandler;
 import com.recoveryrecord.surveyandroid.question.Question;
 import com.recoveryrecord.surveyandroid.question.QuestionsWrapper.SubmitData;
-import com.recoveryrecord.surveyandroid.validation.AnswerProvider;
 import com.recoveryrecord.surveyandroid.validation.Validator;
 
 import java.util.ArrayList;

@@ -1,5 +1,6 @@
 package com.recoveryrecord.surveyandroid.validation;
 
+import com.recoveryrecord.surveyandroid.AnswerProvider;
 import com.recoveryrecord.surveyandroid.question.Validation;
 
 import java.util.List;

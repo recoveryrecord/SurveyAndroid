@@ -1,4 +1,4 @@
-package com.recoveryrecord.surveyandroid.validation;
+package com.recoveryrecord.surveyandroid;
 
 import com.recoveryrecord.surveyandroid.Answer;
 

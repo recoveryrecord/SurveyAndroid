@@ -8,7 +8,7 @@ import android.widget.Button;
 import com.recoveryrecord.surveyandroid.R;
 import com.recoveryrecord.surveyandroid.SubmitSurveyHandler;
 import com.recoveryrecord.surveyandroid.question.QuestionsWrapper.SubmitData;
-import com.recoveryrecord.surveyandroid.validation.AnswerProvider;
+import com.recoveryrecord.surveyandroid.AnswerProvider;
 
 public class SubmitViewHolder extends RecyclerView.ViewHolder {
 

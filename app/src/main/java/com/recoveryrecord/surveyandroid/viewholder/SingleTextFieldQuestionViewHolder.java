@@ -20,7 +20,7 @@ import com.recoveryrecord.surveyandroid.question.SingleTextFieldQuestion;
 import com.recoveryrecord.surveyandroid.question.Validation;
 import com.recoveryrecord.surveyandroid.util.KeyboardUtil;
 import com.recoveryrecord.surveyandroid.util.SimpleTextWatcher;
-import com.recoveryrecord.surveyandroid.validation.AnswerProvider;
+import com.recoveryrecord.surveyandroid.AnswerProvider;
 import com.recoveryrecord.surveyandroid.validation.ValidationResult;
 import com.recoveryrecord.surveyandroid.validation.Validator;
 

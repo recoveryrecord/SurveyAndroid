@@ -10,7 +10,6 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.recoveryrecord.surveyandroid.condition.CustomConditionHandler;
-import com.recoveryrecord.surveyandroid.validation.AnswerProvider;
 import com.recoveryrecord.surveyandroid.validation.DefaultValidator;
 import com.recoveryrecord.surveyandroid.validation.FailedValidationListener;
 import com.recoveryrecord.surveyandroid.validation.Validator;

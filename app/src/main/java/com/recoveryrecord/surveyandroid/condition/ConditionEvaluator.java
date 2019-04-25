@@ -1,7 +1,7 @@
 package com.recoveryrecord.surveyandroid.condition;
 
 import com.recoveryrecord.surveyandroid.Answer;
-import com.recoveryrecord.surveyandroid.validation.AnswerProvider;
+import com.recoveryrecord.surveyandroid.AnswerProvider;
 
 import java.util.HashMap;
 import java.util.Map;
