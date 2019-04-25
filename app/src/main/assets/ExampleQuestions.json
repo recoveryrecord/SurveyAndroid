@@ -20,6 +20,17 @@
       ]
     },
     {
+      "id": "strawberry_more_info",
+      "header": "Question 1.5",
+      "question": "Why strawberry?",
+      "question_type": "single_text_area",
+      "show_if": {
+        "id": "ice_cream",
+        "operation": "equals",
+        "value": "Strawberry"
+      }
+    },
+    {
       "id": "perfect_day",
       "header": "Question 2",
       "question": "How would you describe your perfect day?",

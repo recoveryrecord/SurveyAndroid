@@ -56,6 +56,11 @@ public class DefaultOnSurveyStateChangedListener implements OnSurveyStateChanged
             // This fixes the ItemDecoration "footer"
             getAdapter().notifyItemChanged(adapterPosition - 1, Boolean.FALSE);
         }
+        if (adapterPosition < getAdapter().getItemCount() - 1) {
+            // Only animate if this is a brand-new question
+            getAdapter().notifyItemChanged(adapterPosition, Boolean.FALSE);
+            return;
+        }
         getAdapter().notifyItemInserted(adapterPosition);
         mSmoothScroller.setTargetPosition(adapterPosition);
         // This ensures that the keyboard finishes hiding before we start scrolling

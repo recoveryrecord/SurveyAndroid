@@ -40,7 +40,8 @@ public abstract class SurveyActivity extends AppCompatActivity implements Failed
         mState = new SurveyState(surveyQuestions)
                 .setValidator(getValidator())
                 .setCustomConditionHandler(getCustomConditionHandler())
-                .setSubmitSurveyHandler(getSubmitSurveyHandler());
+                .setSubmitSurveyHandler(getSubmitSurveyHandler())
+                .initFilter();
         mRecyclerView.setAdapter(new SurveyQuestionAdapter(this, mState));
     }
 

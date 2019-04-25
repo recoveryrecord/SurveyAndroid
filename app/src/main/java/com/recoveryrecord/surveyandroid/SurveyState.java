@@ -1,10 +1,15 @@
 package com.recoveryrecord.surveyandroid;
 
+import android.util.Log;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.recoveryrecord.surveyandroid.condition.ConditionEvaluator;
 import com.recoveryrecord.surveyandroid.condition.CustomConditionHandler;
+import com.recoveryrecord.surveyandroid.condition.FilteredQuestions;
+import com.recoveryrecord.surveyandroid.condition.FilteredQuestions.QuestionAdapterPosition;
+import com.recoveryrecord.surveyandroid.condition.OnQuestionSkipStatusChangedListener;
 import com.recoveryrecord.surveyandroid.question.Question;
 import com.recoveryrecord.surveyandroid.question.QuestionsWrapper.SubmitData;
 import com.recoveryrecord.surveyandroid.validation.Validator;
@@ -13,14 +18,17 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 // Tracks the current state of our survey.
 public class SurveyState implements OnQuestionStateChangedListener, AnswerProvider {
+    private static final String TAG = SurveyState.class.getSimpleName();
 
     private SurveyQuestions mSurveyQuestions;
     private Map<String, QuestionState> mQuestionStateMap;
     private Validator mValidator;
     private ConditionEvaluator mConditionEvaluator;
+    private FilteredQuestions mFilteredQuestions;
     private SubmitSurveyHandler mSubmitSurveyHandler;
     private List<OnSurveyStateChangedListener> mSurveyStateListeners = new ArrayList<>();
 
@@ -65,12 +73,33 @@ public class SurveyState implements OnQuestionStateChangedListener, AnswerProvid
         return mVisibleQuestionCount;
     }
 
-    public Question getQuestionFor(int position) {
-        return mSurveyQuestions.getQuestionFor(position);
+    public SurveyState initFilter() {
+        mFilteredQuestions = new FilteredQuestions(mSurveyQuestions, getConditionEvaluator());
+        mFilteredQuestions.setOnQuestionSkipStatusChangedListener(new OnQuestionSkipStatusChangedListener() {
+            @Override
+            public void skipStatusChanged(Set<QuestionAdapterPosition> newlySkippedQuestionIds, Set<QuestionAdapterPosition> newlyShownQuestionIds) {
+                for (QuestionAdapterPosition skippedQ: newlySkippedQuestionIds) {
+                    questionRemoved(skippedQ.adapterPosition);
+                }
+                for (QuestionAdapterPosition shownQ: newlyShownQuestionIds) {
+                    if (shownQ.adapterPosition > mVisibleQuestionCount - 1) {
+                        questionInserted(shownQ.adapterPosition);
+                    }
+                }
+            }
+        });
+        return this;
+    }
+
+    public Question getQuestionFor(int adapterPosition) {
+        if (mFilteredQuestions == null) {
+            throw new IllegalStateException("Please call initFilter on SurveyState!");
+        }
+        return mFilteredQuestions.getQuestionFor(adapterPosition);
     }
 
     public boolean isSubmitPosition(int adapterPosition) {
-        return mSurveyQuestions.size() == adapterPosition;
+        return mFilteredQuestions.size() == adapterPosition;
     }
 
     public QuestionState getStateFor(String questionId) {
@@ -91,6 +120,7 @@ public class SurveyState implements OnQuestionStateChangedListener, AnswerProvid
     @Override
     public void questionAnswered(QuestionState newQuestionState) {
         mQuestionStateMap.put(newQuestionState.id(), newQuestionState);
+        mFilteredQuestions.questionAnswered(newQuestionState);
         Question lastQuestion = getQuestionFor(mVisibleQuestionCount - 1);
         if (lastQuestion != null && newQuestionState.id().equals(lastQuestion.id)) {
             increaseVisibleQuestionCount();
@@ -122,6 +152,10 @@ public class SurveyState implements OnQuestionStateChangedListener, AnswerProvid
     }
 
     private ObjectNode putAnswer(ObjectNode objectNode, String key, Answer answer) {
+        if (answer == null) {
+            Log.e(TAG, "Answer is null for key: " + key);
+            return objectNode;
+        }
         if (answer.isString()) {
             objectNode.put(key, answer.getValue());
         } else if (answer.isList()) {
@@ -145,7 +179,7 @@ public class SurveyState implements OnQuestionStateChangedListener, AnswerProvid
     }
 
     public void increaseVisibleQuestionCount() {
-        if (mVisibleQuestionCount <= mSurveyQuestions.size()) {
+        if (mVisibleQuestionCount <= mFilteredQuestions.size()) {
             mVisibleQuestionCount += 1;
             questionInserted(mVisibleQuestionCount - 1);
         }

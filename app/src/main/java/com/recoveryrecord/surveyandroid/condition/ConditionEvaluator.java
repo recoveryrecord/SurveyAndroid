@@ -32,7 +32,7 @@ public class ConditionEvaluator {
 
     private boolean isConditionMet(SimpleCondition simpleCondition) {
         Answer answer = mAnswerProvider.answerFor(simpleCondition.id);
-        if (simpleCondition.subid != null) {
+        if (simpleCondition.subid != null && answer != null) {
             answer = answer.getValueMap() == null ? null : answer.getValueMap().get(simpleCondition.subid);
         }
         // Empty answers always result in a true
