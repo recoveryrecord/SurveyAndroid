@@ -21,6 +21,6 @@ public class ExampleInstrumentedTest {
         // Context of the app under test.
         Context appContext = InstrumentationRegistry.getTargetContext();
 
-        assertEquals("com.recoveryrecord.surveyandroid", appContext.getPackageName());
+        assertEquals("com.recoveryrecord.surveyandroid.test", appContext.getPackageName());
     }
 }
