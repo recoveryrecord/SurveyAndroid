@@ -20,7 +20,9 @@ public class ConditionEvaluator {
     }
 
     public boolean isConditionMet(Condition condition) {
-        if (condition instanceof SimpleCondition) {
+        if (condition == null) {
+            return true;
+        } else if (condition instanceof SimpleCondition) {
             return isConditionMet((SimpleCondition) condition);
         } else if (condition instanceof DecisionCondition) {
             return isConditionMet((DecisionCondition) condition);

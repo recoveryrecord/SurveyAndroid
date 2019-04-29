@@ -40,7 +40,7 @@ public class FilteredQuestions implements OnQuestionStateChangedListener {
     }
 
     private boolean isSkipped(Question question) {
-        return mConditionEvaluator.isConditionMet(question.showIf);
+        return !mConditionEvaluator.isConditionMet(question.showIf);
     }
 
     private void updateAdapterToRealPositions() {

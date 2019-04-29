@@ -82,8 +82,10 @@ public class SurveyState implements OnQuestionStateChangedListener, AnswerProvid
                     questionRemoved(skippedQ.adapterPosition);
                 }
                 for (QuestionAdapterPosition shownQ: newlyShownQuestionIds) {
-                    if (shownQ.adapterPosition > mVisibleQuestionCount - 1) {
+                    if (shownQ.adapterPosition < mVisibleQuestionCount - 1) {
                         questionInserted(shownQ.adapterPosition);
+                    } else if (shownQ.adapterPosition == mVisibleQuestionCount - 1) {
+                        questionChanged(shownQ.adapterPosition);
                     }
                 }
             }
@@ -202,6 +204,12 @@ public class SurveyState implements OnQuestionStateChangedListener, AnswerProvid
     public void questionRemoved(int adapterPosition) {
         for (OnSurveyStateChangedListener listener : mSurveyStateListeners) {
             listener.questionRemoved(adapterPosition);
+        }
+    }
+
+    public void questionChanged(int adapterPosition) {
+        for (OnSurveyStateChangedListener listener : mSurveyStateListeners) {
+            listener.questionChanged(adapterPosition);
         }
     }
 

@@ -88,6 +88,15 @@ public class DefaultOnSurveyStateChangedListener implements OnSurveyStateChanged
     }
 
     @Override
+    public void questionChanged(int adapterPosition) {
+        if (getAdapter() == null) {
+            Log.e(TAG, "Adapter is null during questionChanged");
+            return;
+        }
+        getAdapter().notifyItemChanged(adapterPosition);
+    }
+
+    @Override
     public void submitButtonInserted(int adapterPosition) {
         if (getAdapter() == null) {
             Log.e(TAG, "Adapter is null during submitButtonInserted");
