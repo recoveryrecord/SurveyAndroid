@@ -74,7 +74,7 @@ public class SurveyQuestionAdapter extends RecyclerView.Adapter<RecyclerView.Vie
         }
     }
 
-    SurveyQuestionAdapter(Context context, SurveyState state) {
+    public SurveyQuestionAdapter(Context context, SurveyState state) {
         mContext = context;
         mState = state;
     }
