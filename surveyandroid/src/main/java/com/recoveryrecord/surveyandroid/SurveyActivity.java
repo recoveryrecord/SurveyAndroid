@@ -1,6 +1,7 @@
 package com.recoveryrecord.surveyandroid;
 
 import android.os.Bundle;
+import android.support.annotation.LayoutRes;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -27,7 +28,7 @@ public abstract class SurveyActivity extends AppCompatActivity implements Failed
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_survey);
+        setContentView(getLayoutResId());
         setTitle(getSurveyTitle());
 
         SurveyQuestions surveyQuestions = createSurveyQuestions();
@@ -35,6 +36,10 @@ public abstract class SurveyActivity extends AppCompatActivity implements Failed
 
         mState = createSurveyState(surveyQuestions);
         setupRecyclerView();
+    }
+
+    protected @LayoutRes int getLayoutResId() {
+        return R.layout.activity_survey;
     }
 
     protected SurveyQuestions createSurveyQuestions() {
