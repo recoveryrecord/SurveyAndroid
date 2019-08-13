@@ -30,19 +30,31 @@ public abstract class SurveyActivity extends AppCompatActivity implements Failed
         setContentView(R.layout.activity_survey);
         setTitle(getSurveyTitle());
 
-        SurveyQuestions surveyQuestions = SurveyQuestions.load(this, getJsonFilename());
+        SurveyQuestions surveyQuestions = createSurveyQuestions();
         Log.d(TAG, "Questions = " + surveyQuestions);
 
+        mState = createSurveyState(surveyQuestions);
+        setupRecyclerView();
+    }
+
+    protected SurveyQuestions createSurveyQuestions() {
+        return SurveyQuestions.load(this, getJsonFilename());
+    }
+
+    protected void setupRecyclerView() {
         mRecyclerView = findViewById(R.id.recycler_view);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         mRecyclerView.addItemDecoration(new SpaceOnLastItemDecoration(getDisplayHeightPixels()));
         mRecyclerView.setItemAnimator(new SurveyQuestionItemAnimator());
-        mState = new SurveyState(surveyQuestions)
+        mRecyclerView.setAdapter(new SurveyQuestionAdapter(this, mState));
+    }
+
+    protected SurveyState createSurveyState(SurveyQuestions surveyQuestions) {
+        return new SurveyState(surveyQuestions)
                 .setValidator(getValidator())
                 .setCustomConditionHandler(getCustomConditionHandler())
                 .setSubmitSurveyHandler(getSubmitSurveyHandler())
                 .initFilter();
-        mRecyclerView.setAdapter(new SurveyQuestionAdapter(this, mState));
     }
 
     private int getDisplayHeightPixels() {

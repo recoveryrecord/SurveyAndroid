@@ -47,6 +47,24 @@ public class SurveyQuestions {
         return new SurveyQuestions(context, questions, submitData);
     }
 
+    public static SurveyQuestions createSurveyQuestionsFromJsonString(Context context, String jsonString) {
+        ArrayList<Question> questions = new ArrayList<>();
+        SubmitData submitData = null;
+        ObjectMapper mapper = new ObjectMapper()
+                .enable(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY)
+                .disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
+        try {
+            QuestionsWrapper wrapper = mapper.readValue(jsonString, new TypeReference<QuestionsWrapper>(){});
+            if (wrapper.questions != null) {
+                questions = wrapper.questions;
+            }
+            submitData = wrapper.submit;
+        } catch (IOException ioe) {
+            Log.e(TAG, "Error while parsing jsonString: " + jsonString, ioe);
+        }
+        return new SurveyQuestions(context, questions, submitData);
+    }
+
     public SurveyQuestions(Context context, ArrayList<Question> questions, SubmitData submitData) {
         mContext = context;
         mQuestions = questions;
