@@ -1,6 +1,10 @@
 # SurveyAndroid
 Android Surveys built from declarative definitions (JSON). Many question types, skip logic etc. It is based off of the iOS [SurveyNative project](https://github.com/recoveryrecord/SurveyNative), but currently supports only a subset of that functionality.
 
+## Install
+Include the following line in your build.gradle dependencies:
+
+`implementation 'com.recoveryrecord:surveyandroid:1.0'`
 
 ## Features
 
