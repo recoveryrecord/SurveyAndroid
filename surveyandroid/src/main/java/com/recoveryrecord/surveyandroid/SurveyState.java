@@ -32,6 +32,7 @@ public class SurveyState implements OnQuestionStateChangedListener, AnswerProvid
     private FilteredQuestions mFilteredQuestions;
     private SubmitSurveyHandler mSubmitSurveyHandler;
     private List<OnSurveyStateChangedListener> mSurveyStateListeners = new ArrayList<>();
+    private List<OnQuestionStateChangedListener> mQuestionStateChangedListeners = new ArrayList<>();
 
     private int mVisibleQuestionCount = 1;
     private boolean mIsSubmitButtonShown = false;
@@ -161,6 +162,9 @@ public class SurveyState implements OnQuestionStateChangedListener, AnswerProvid
     @Override
     public void questionStateChanged(QuestionState newQuestionState) {
         mQuestionStateMap.put(newQuestionState.id(), newQuestionState);
+        for (OnQuestionStateChangedListener listener : mQuestionStateChangedListeners) {
+            listener.questionStateChanged(newQuestionState);
+        }
     }
 
     @Override
@@ -171,6 +175,9 @@ public class SurveyState implements OnQuestionStateChangedListener, AnswerProvid
         while (!isSubmitButtonShown() && lastQuestion != null && isAnswered(lastQuestion)) {
             increaseVisibleQuestionCount();
             lastQuestion = getQuestionFor(mVisibleQuestionCount - 1);
+        }
+        for (OnQuestionStateChangedListener listener : mQuestionStateChangedListeners) {
+            listener.questionAnswered(newQuestionState);
         }
     }
 
@@ -246,6 +253,14 @@ public class SurveyState implements OnQuestionStateChangedListener, AnswerProvid
 
     public void removeOnSurveyStateChangedListener(OnSurveyStateChangedListener listener) {
         mSurveyStateListeners.remove(listener);
+    }
+
+    public void addOnQuestionStateChangedListener(OnQuestionStateChangedListener listener) {
+        mQuestionStateChangedListeners.add(listener);
+    }
+
+    public void removeOnQuestionStateChangedListener(OnQuestionStateChangedListener listener) {
+        mQuestionStateChangedListeners.remove(listener);
     }
 
     private void questionInserted(int adapterPosition) {
