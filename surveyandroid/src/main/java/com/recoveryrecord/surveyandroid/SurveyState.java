@@ -97,6 +97,9 @@ public class SurveyState implements OnQuestionStateChangedListener, AnswerProvid
         if (mFilteredQuestions == null) {
             throw new IllegalStateException("Please call initFilter on SurveyState!");
         }
+        if (isSubmitPosition(adapterPosition)) {
+            return null;
+        }
         return mFilteredQuestions.getQuestionFor(adapterPosition);
     }
 
