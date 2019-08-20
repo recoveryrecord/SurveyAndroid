@@ -7,7 +7,7 @@ import com.recoveryrecord.surveyandroid.condition.Condition;
 
 import java.util.ArrayList;
 
-@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "question_type", visible = true)
+@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "question_type", visible = true, defaultImpl = UnsupportedQuestion.class)
 @JsonSubTypes({
         @JsonSubTypes.Type(value = SingleSelectQuestion.class, name = "single_select"),
         @JsonSubTypes.Type(value = MultiSelectQuestion.class, name = "multi_select"),

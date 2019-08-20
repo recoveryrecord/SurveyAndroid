@@ -54,7 +54,8 @@ public class SurveyQuestionAdapter extends RecyclerView.Adapter<RecyclerView.Vie
         SEGMENT_SELECT("segment_select"),
         TABLE_SELECT("table_select"),
         SUBMIT("submit"),
-        EMPTY("empty");
+        EMPTY("empty"),
+        UNSUPPORTED("");
 
         private String mValue;
 
@@ -118,6 +119,7 @@ public class SurveyQuestionAdapter extends RecyclerView.Adapter<RecyclerView.Vie
             case SUBMIT:
                 return new SubmitViewHolder(view);
             case EMPTY:
+            case UNSUPPORTED:
                 return new EmptyViewHolder(view);
         }
         return null;
@@ -199,6 +201,7 @@ public class SurveyQuestionAdapter extends RecyclerView.Adapter<RecyclerView.Vie
                 }
                 break;
             case EMPTY:
+            case UNSUPPORTED:
                 break;
         }
     }
@@ -230,6 +233,7 @@ public class SurveyQuestionAdapter extends RecyclerView.Adapter<RecyclerView.Vie
             case SUBMIT:
                 return R.layout.view_submit_button;
             case EMPTY:
+            case UNSUPPORTED:
                 return R.layout.view_empty;
         }
         return 0;
