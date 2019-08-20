@@ -4,6 +4,7 @@ import android.content.Context;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,6 +24,7 @@ import com.recoveryrecord.surveyandroid.question.YearPickerQuestion;
 import com.recoveryrecord.surveyandroid.viewholder.AddTextFieldQuestionViewHolder;
 import com.recoveryrecord.surveyandroid.viewholder.DatePickerQuestionViewHolder;
 import com.recoveryrecord.surveyandroid.viewholder.DynamicLabelTextFieldQuestionViewHolder;
+import com.recoveryrecord.surveyandroid.viewholder.EmptyViewHolder;
 import com.recoveryrecord.surveyandroid.viewholder.MultiSelectQuestionViewHolder;
 import com.recoveryrecord.surveyandroid.viewholder.MultiTextFieldQuestionViewHolder;
 import com.recoveryrecord.surveyandroid.viewholder.SegmentSelectQuestionViewHolder;
@@ -34,6 +36,7 @@ import com.recoveryrecord.surveyandroid.viewholder.TableSelectQuestionViewHolder
 import com.recoveryrecord.surveyandroid.viewholder.YearPickerQuestionViewHolder;
 
 public class SurveyQuestionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+    private static final String TAG = SurveyQuestionAdapter.class.getSimpleName();
 
     private Context mContext;
     private SurveyState mState;
@@ -50,7 +53,8 @@ public class SurveyQuestionAdapter extends RecyclerView.Adapter<RecyclerView.Vie
         ADD_TEXT_FIELD("add_text_field"),
         SEGMENT_SELECT("segment_select"),
         TABLE_SELECT("table_select"),
-        SUBMIT("submit");
+        SUBMIT("submit"),
+        EMPTY("empty");
 
         private String mValue;
 
@@ -113,6 +117,8 @@ public class SurveyQuestionAdapter extends RecyclerView.Adapter<RecyclerView.Vie
                 return new TableSelectQuestionViewHolder(getContext(), view);
             case SUBMIT:
                 return new SubmitViewHolder(view);
+            case EMPTY:
+                return new EmptyViewHolder(view);
         }
         return null;
     }
@@ -126,6 +132,10 @@ public class SurveyQuestionAdapter extends RecyclerView.Adapter<RecyclerView.Vie
             questionType = QuestionType.SUBMIT;
         } else {
             question = getItem(position);
+            if (question == null) {
+                Log.e(TAG, "Unable to find question for position: " + position);
+                return;
+            }
             questionType = getQuestionType(position);
             questionState = mState.getStateFor(question.id);
         }
@@ -187,6 +197,9 @@ public class SurveyQuestionAdapter extends RecyclerView.Adapter<RecyclerView.Vie
                 if (viewHolder instanceof SubmitViewHolder) {
                     ((SubmitViewHolder) viewHolder).bind(mState.getSubmitData(), mState, mState.getSubmitSurveyHandler());
                 }
+                break;
+            case EMPTY:
+                break;
         }
     }
 
@@ -216,6 +229,8 @@ public class SurveyQuestionAdapter extends RecyclerView.Adapter<RecyclerView.Vie
                 return R.layout.view_table_select_question;
             case SUBMIT:
                 return R.layout.view_submit_button;
+            case EMPTY:
+                return R.layout.view_empty;
         }
         return 0;
     }
@@ -234,11 +249,15 @@ public class SurveyQuestionAdapter extends RecyclerView.Adapter<RecyclerView.Vie
             return QuestionType.SUBMIT;
         }
         Question question = getItem(position);
+        if (question == null) {
+            Log.e(TAG, "Unable to find question for position: " + position + ", using EMPTY");
+            return QuestionType.EMPTY;
+        }
         return QuestionType.fromString(question.questionType);
     }
 
     @Override
     public int getItemCount() {
-        return mState.getVisibleQuestionCount();
+        return mState.getVisibleQuestionCount() + (mState.isSubmitButtonShown() ? 1 : 0);
     }
 }

@@ -16,6 +16,7 @@ import com.recoveryrecord.surveyandroid.validation.Validator;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -33,6 +34,7 @@ public class SurveyState implements OnQuestionStateChangedListener, AnswerProvid
     private List<OnSurveyStateChangedListener> mSurveyStateListeners = new ArrayList<>();
 
     private int mVisibleQuestionCount = 1;
+    private boolean mIsSubmitButtonShown = false;
 
     private ObjectMapper mObjectMapper;
 
@@ -73,24 +75,63 @@ public class SurveyState implements OnQuestionStateChangedListener, AnswerProvid
         return mVisibleQuestionCount;
     }
 
+    public boolean isSubmitButtonShown() {
+        return mIsSubmitButtonShown;
+    }
+
     public SurveyState initFilter() {
         mFilteredQuestions = new FilteredQuestions(mSurveyQuestions, getConditionEvaluator());
         mFilteredQuestions.setOnQuestionSkipStatusChangedListener(new OnQuestionSkipStatusChangedListener() {
             @Override
             public void skipStatusChanged(Set<QuestionAdapterPosition> newlySkippedQuestionIds, Set<QuestionAdapterPosition> newlyShownQuestionIds) {
+                Set<Integer> removedPositions = new HashSet<>();
+                Set<Integer> addedPositions = new HashSet<>();
                 for (QuestionAdapterPosition skippedQ: newlySkippedQuestionIds) {
-                    questionRemoved(skippedQ.adapterPosition);
+                    removedPositions.add(skippedQ.adapterPosition);
                 }
                 for (QuestionAdapterPosition shownQ: newlyShownQuestionIds) {
-                    if (shownQ.adapterPosition < mVisibleQuestionCount - 1) {
-                        questionInserted(shownQ.adapterPosition);
-                    } else if (shownQ.adapterPosition == mVisibleQuestionCount - 1) {
-                        questionChanged(shownQ.adapterPosition);
+                    addedPositions.add(shownQ.adapterPosition);
+                }
+                // Always remove the submit button, if present.  It will get added later if necessary
+                if (isSubmitButtonShown()) {
+                    mIsSubmitButtonShown = false;
+                    questionRemoved(mFilteredQuestions.size());
+                }
+                int visibleQuestionCount = mVisibleQuestionCount;
+                for (int i = 0; i < visibleQuestionCount; i++) {
+                    String addedId = getIdByPosition(newlyShownQuestionIds, i);
+                    if (removedPositions.contains(i) && addedPositions.contains(i)) {
+                        questionChanged(i);
+                    } else if (addedPositions.contains(i)) {
+                        mVisibleQuestionCount++;
+                        questionInserted(i);
+                    } else if (removedPositions.contains(i)) {
+                        mVisibleQuestionCount--;
+                        questionRemoved(i);
+                    }
+
+                    if (addedId != null && !isQuestionAnswered(addedId)) {
+                        mVisibleQuestionCount = i + 1;
+                        questionsRemoved(visibleQuestionCount, visibleQuestionCount - i);
+                        break;
                     }
                 }
             }
+
+            private String getIdByPosition(Set<QuestionAdapterPosition> questionPositions, int position) {
+                for (QuestionAdapterPosition questionAdapterPosition : questionPositions) {
+                    if (questionAdapterPosition.adapterPosition == position) {
+                        return questionAdapterPosition.questionId;
+                    }
+                }
+                return null;
+            }
         });
         return this;
+    }
+
+    private boolean isQuestionAnswered(String questionId) {
+        return getStateFor(questionId).isAnswered();
     }
 
     public Question getQuestionFor(int adapterPosition) {
@@ -127,9 +168,15 @@ public class SurveyState implements OnQuestionStateChangedListener, AnswerProvid
         mQuestionStateMap.put(newQuestionState.id(), newQuestionState);
         mFilteredQuestions.questionAnswered(newQuestionState);
         Question lastQuestion = getQuestionFor(mVisibleQuestionCount - 1);
-        if (lastQuestion != null && newQuestionState.id().equals(lastQuestion.id)) {
+        while (!isSubmitButtonShown() && lastQuestion != null && isAnswered(lastQuestion)) {
             increaseVisibleQuestionCount();
+            lastQuestion = getQuestionFor(mVisibleQuestionCount - 1);
         }
+    }
+
+    public boolean isAnswered(Question question) {
+        QuestionState questionState = getStateFor(question.id);
+        return questionState.isAnswered();
     }
 
     @Override
@@ -184,9 +231,12 @@ public class SurveyState implements OnQuestionStateChangedListener, AnswerProvid
     }
 
     public void increaseVisibleQuestionCount() {
-        if (mVisibleQuestionCount <= mFilteredQuestions.size()) {
+        if (mVisibleQuestionCount < mFilteredQuestions.size()) {
             mVisibleQuestionCount += 1;
             questionInserted(mVisibleQuestionCount - 1);
+        } else if (mVisibleQuestionCount == mFilteredQuestions.size()){
+            mIsSubmitButtonShown = true;
+            submitButtonInserted(mVisibleQuestionCount);
         }
     }
 
@@ -207,6 +257,12 @@ public class SurveyState implements OnQuestionStateChangedListener, AnswerProvid
     public void questionRemoved(int adapterPosition) {
         for (OnSurveyStateChangedListener listener : mSurveyStateListeners) {
             listener.questionRemoved(adapterPosition);
+        }
+    }
+
+    public void questionsRemoved(int startAdapterPosition, int itemCount) {
+        for (OnSurveyStateChangedListener listener : mSurveyStateListeners) {
+            listener.questionsRemoved(startAdapterPosition, itemCount);
         }
     }
 

@@ -88,6 +88,19 @@ public class DefaultOnSurveyStateChangedListener implements OnSurveyStateChanged
     }
 
     @Override
+    public void questionsRemoved(int startAdapterPosition, int itemCount) {
+        if (getAdapter() == null) {
+            Log.e(TAG, "Adapter is null during questionRemoved");
+            return;
+        }
+        if (startAdapterPosition > 0) {
+            // This fixes the ItemDecoration "footer"
+            getAdapter().notifyItemChanged(startAdapterPosition - 1, Boolean.FALSE);
+        }
+        getAdapter().notifyItemRangeRemoved(startAdapterPosition, itemCount);
+    }
+
+    @Override
     public void questionChanged(int adapterPosition) {
         if (getAdapter() == null) {
             Log.e(TAG, "Adapter is null during questionChanged");
