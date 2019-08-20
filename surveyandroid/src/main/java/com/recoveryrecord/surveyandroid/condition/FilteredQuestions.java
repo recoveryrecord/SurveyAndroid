@@ -1,5 +1,7 @@
 package com.recoveryrecord.surveyandroid.condition;
 
+import android.support.annotation.Nullable;
+
 import com.recoveryrecord.surveyandroid.OnQuestionStateChangedListener;
 import com.recoveryrecord.surveyandroid.QuestionState;
 import com.recoveryrecord.surveyandroid.SurveyQuestions;
@@ -28,10 +30,14 @@ public class FilteredQuestions implements OnQuestionStateChangedListener {
     }
 
     public Question getQuestionFor(int adapterPosition) {
-        return mSurveyQuestions.getQuestionFor(adapterToReal(adapterPosition));
+        Integer realIndex = adapterToReal(adapterPosition);
+        return realIndex == null ? null : mSurveyQuestions.getQuestionFor(realIndex);
     }
 
-    private Integer adapterToReal(int adapterPosition) {
+    private @Nullable Integer adapterToReal(int adapterPosition) {
+        if (adapterPosition < 0 || adapterPosition > mAdapterToRealPositions.size()) {
+            return null;
+        }
         return mAdapterToRealPositions.get(adapterPosition);
     }
 
