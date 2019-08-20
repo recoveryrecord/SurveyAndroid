@@ -3,6 +3,7 @@ package com.recoveryrecord.surveyandroid.viewholder;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.TextView;
 
@@ -31,7 +32,11 @@ public abstract class QuestionViewHolder<Q extends Question> extends RecyclerVie
 
     public void bind(Q question) {
         resetState();
-        headerText.setText(question.header);
+        if (TextUtils.isEmpty(question.header)) {
+            headerText.setVisibility(View.GONE);
+        } else {
+            headerText.setText(question.header);
+        }
         questionText.setText(question.question);
     }
 
