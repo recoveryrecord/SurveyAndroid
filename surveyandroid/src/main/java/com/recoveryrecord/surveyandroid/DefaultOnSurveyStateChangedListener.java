@@ -6,6 +6,8 @@ import android.support.v7.widget.RecyclerView;
 import android.util.DisplayMetrics;
 import android.util.Log;
 
+import com.recoveryrecord.surveyandroid.util.KeyboardUtil;
+
 public class DefaultOnSurveyStateChangedListener implements OnSurveyStateChangedListener {
     private static final String TAG = DefaultOnSurveyStateChangedListener.class.getSimpleName();
 
@@ -63,6 +65,7 @@ public class DefaultOnSurveyStateChangedListener implements OnSurveyStateChanged
         }
         getAdapter().notifyItemInserted(adapterPosition);
         mSmoothScroller.setTargetPosition(adapterPosition);
+        KeyboardUtil.hideKeyboard(getContext(), getRecyclerView());
         // This ensures that the keyboard finishes hiding before we start scrolling
         getRecyclerView().post(new Runnable() {
             @Override
