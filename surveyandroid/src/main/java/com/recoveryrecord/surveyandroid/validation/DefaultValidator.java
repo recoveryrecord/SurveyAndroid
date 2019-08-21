@@ -1,5 +1,7 @@
 package com.recoveryrecord.surveyandroid.validation;
 
+import android.text.TextUtils;
+
 import com.recoveryrecord.surveyandroid.AnswerProvider;
 import com.recoveryrecord.surveyandroid.question.Validation;
 
@@ -51,7 +53,15 @@ public class DefaultValidator implements Validator {
             }
             value = Double.parseDouble(answerProvider.answerFor(validation.answerToQuestionId).getValue());
         }
-        Double numAnswer = Double.parseDouble(answer);
+        if (TextUtils.isEmpty(answer)) {
+            return false;
+        }
+        Double numAnswer;
+        try {
+            numAnswer = Double.parseDouble(answer);
+        } catch (NumberFormatException nfe) {
+            return false;
+        }
         switch (validation.operation) {
             case "equals":
                 return numAnswer.equals(value);
