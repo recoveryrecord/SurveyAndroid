@@ -1,6 +1,7 @@
 <resources>
 
     <declare-styleable name="Widget.SurveyAndroid">
+        <attr name="colorPrimary" format="reference|color" />
         <attr name="firstSegmentBackground" format="reference" />
         <attr name="middleSegmentBackground" format="reference" />
         <attr name="lastSegmentBackground" format="reference" />
