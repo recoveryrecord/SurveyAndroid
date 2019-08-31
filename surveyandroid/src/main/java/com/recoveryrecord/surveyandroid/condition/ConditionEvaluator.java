@@ -1,5 +1,7 @@
 package com.recoveryrecord.surveyandroid.condition;
 
+import android.util.Log;
+
 import com.recoveryrecord.surveyandroid.Answer;
 import com.recoveryrecord.surveyandroid.AnswerProvider;
 
@@ -7,6 +9,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class ConditionEvaluator {
+    private static final String TAG = ConditionEvaluator.class.getSimpleName();
 
     private AnswerProvider mAnswerProvider;
     private CustomConditionHandler mCustomConditionHandler;
@@ -20,16 +23,18 @@ public class ConditionEvaluator {
     }
 
     public boolean isConditionMet(Condition condition) {
+        boolean result = false;
         if (condition == null) {
-            return true;
+            result =  true;
         } else if (condition instanceof SimpleCondition) {
-            return isConditionMet((SimpleCondition) condition);
+            result = isConditionMet((SimpleCondition) condition);
         } else if (condition instanceof DecisionCondition) {
-            return isConditionMet((DecisionCondition) condition);
+            result = isConditionMet((DecisionCondition) condition);
         } else if (condition instanceof CustomCondition) {
-            return isConditionMet((CustomCondition) condition);
+            result = isConditionMet((CustomCondition) condition);
         }
-        return false;
+        Log.d(TAG, "Evaluated Condition: " + condition + " as " + result);
+        return result;
     }
 
     private boolean isConditionMet(SimpleCondition simpleCondition) {
@@ -37,9 +42,23 @@ public class ConditionEvaluator {
         if (simpleCondition.subid != null && answer != null) {
             answer = answer.getValueMap() == null ? null : answer.getValueMap().get(simpleCondition.subid);
         }
-        // Empty answers always result in a true
+        // Empty answer reasults depend on the operation
         if (answer == null) {
-            return true;
+            switch (simpleCondition.operation) {
+                case "equals":
+                    return simpleCondition.value.equals(null);
+                case "not equals":
+                    return !simpleCondition.value.equals(null);
+                case "greater than":
+                case "greater than or equal to":
+                case "less than":
+                case "less than or equal to":
+                    return false;
+                case "contains":
+                    return false;
+                case "not contains":
+                    return true;
+            }
         }
         switch (simpleCondition.operation) {
             case "equals":
