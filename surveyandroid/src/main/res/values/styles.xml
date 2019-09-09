@@ -86,9 +86,13 @@
         <item name="android:textColor">?segmentTextColor</item>
     </style>
 
-    <style name="Widget.SurveyAndroid.SegmentTagsContainer" />
+    <style name="Widget.SurveyAndroid.SegmentTagsContainer">
+        <item name="android:paddingTop">?paddingSmall</item>
+    </style>
 
-    <style name="Widget.SurveyAndroid.SegmentTag" />
+    <style name="Widget.SurveyAndroid.SegmentTag">
+        <item name="android:textColor">@color/gray_text_color</item>
+    </style>
 
     <style name="Widget.SurveyAndroid.SubmitSpacer">
         <item name="android:layout_height">20dp</item>
