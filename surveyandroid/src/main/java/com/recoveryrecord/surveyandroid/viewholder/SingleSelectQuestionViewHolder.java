@@ -5,6 +5,7 @@ import android.support.annotation.NonNull;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
+import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -51,6 +52,7 @@ public class SingleSelectQuestionViewHolder extends QuestionViewHolder<SingleSel
         for (Option option : question.options) {
             final RadioButton radioButton = new RadioButton(getContext());
             radioButton.setText(option.title);
+            radioButton.setGravity(Gravity.TOP);
             if (option instanceof OtherOption) {
                 radioButton.setTag(R.id.is_other, Boolean.TRUE);
                 radioButton.setTag(R.id.input_type_number, ((OtherOption) option).type.equals("number"));
