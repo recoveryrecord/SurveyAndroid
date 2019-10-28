@@ -5,6 +5,7 @@ import android.support.annotation.NonNull;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
+import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,6 +24,7 @@ import com.recoveryrecord.surveyandroid.question.OtherOption;
 import com.recoveryrecord.surveyandroid.question.SingleSelectQuestion;
 import com.recoveryrecord.surveyandroid.util.KeyboardUtil;
 import com.recoveryrecord.surveyandroid.util.SimpleTextWatcher;
+import com.recoveryrecord.surveyandroid.util.TopAlignedRadioButton;
 
 public class SingleSelectQuestionViewHolder extends QuestionViewHolder<SingleSelectQuestion> {
 
@@ -49,7 +51,7 @@ public class SingleSelectQuestionViewHolder extends QuestionViewHolder<SingleSel
         super.bind(question);
         int checkedId = -1;
         for (Option option : question.options) {
-            final RadioButton radioButton = new RadioButton(getContext());
+            final RadioButton radioButton = new TopAlignedRadioButton(getContext());
             radioButton.setText(option.title);
             if (option instanceof OtherOption) {
                 radioButton.setTag(R.id.is_other, Boolean.TRUE);
