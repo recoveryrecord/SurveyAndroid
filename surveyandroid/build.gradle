@@ -1,9 +1,6 @@
 apply plugin: 'com.android.library'
 apply plugin: 'com.novoda.bintray-release'
 
-group = "com.recoveryrecord"
-version = "1.7"
-
 android {
     compileSdkVersion 28
 
