@@ -32,6 +32,9 @@ public class SingleSelectQuestionViewHolder extends QuestionViewHolder<SingleSel
     private static final String EDIT_TEXT_KEY = "edit_text";
     private static final String HAS_BEEN_ANSWERED_KEY = "has_been_answered_key";
 
+    private static final int RADIO_BUTTON_EXTRA_LEFT_MARGIN_DP = 2;
+    private static final int RADIO_BUTTON_EXTRA_BOTTOM_MARGIN_DP = 7;
+
     private RadioGroup answerSelector;
     private ViewGroup otherSection;
     private EditText editOther;
@@ -60,7 +63,16 @@ public class SingleSelectQuestionViewHolder extends QuestionViewHolder<SingleSel
                     otherSection.setVisibility(View.VISIBLE);
                 }
             }
+
             answerSelector.addView(radioButton);
+
+            int extraLeftMargin = (int)convertDpToPx(getContext(), RADIO_BUTTON_EXTRA_LEFT_MARGIN_DP);
+            int extraBottomMargin = (int) convertDpToPx(getContext(), RADIO_BUTTON_EXTRA_BOTTOM_MARGIN_DP);
+
+            RadioGroup.LayoutParams params = (RadioGroup.LayoutParams)radioButton.getLayoutParams();
+            params.setMargins(params.leftMargin + extraLeftMargin, params.topMargin, params.rightMargin, params.bottomMargin + extraBottomMargin);
+            radioButton.setLayoutParams(params);
+
             if (shouldCheckButton(questionState, option.title)) {
                 checkedId = radioButton.getId();
             }
@@ -157,5 +169,9 @@ public class SingleSelectQuestionViewHolder extends QuestionViewHolder<SingleSel
 
     private void setHasBeenAnswered(QuestionState questionState) {
         questionState.put(HAS_BEEN_ANSWERED_KEY, true);
+    }
+
+    public float convertDpToPx(Context context, float dp) {
+        return dp * context.getResources().getDisplayMetrics().density;
     }
 }

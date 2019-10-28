@@ -9,6 +9,11 @@ import android.support.v7.widget.AppCompatRadioButton;
 import android.util.AttributeSet;
 
 public class TopAlignedRadioButton extends AppCompatRadioButton {
+
+    private static final int EXTRA_LEFT_PADDING_DP = -2;
+
+    private static final float MULTI_LINE_DRAWABLE_VERTICAL_CORRECTION_DP = -5.71428f;
+
     public TopAlignedRadioButton(Context context) {
         super(context);
     }
@@ -35,10 +40,16 @@ public class TopAlignedRadioButton extends AppCompatRadioButton {
         final int drawableWidth = buttonDrawable.getIntrinsicWidth();
 
         int top = 0;
-        int bottom = top + drawableHeight;
-        int left = 0;
 
-        buttonDrawable.setBounds(left, top, drawableWidth, bottom);
+        if (getLineCount() > 1) {
+            top = (int)convertDpToPx(getContext(), MULTI_LINE_DRAWABLE_VERTICAL_CORRECTION_DP);
+        }
+
+        int bottom = top + drawableHeight;
+        int left = (int)convertDpToPx(getContext(), EXTRA_LEFT_PADDING_DP);
+        int right = left + drawableWidth;
+
+        buttonDrawable.setBounds(left, top, right, bottom);
         buttonDrawable.draw(canvas);
 
         // We don't want CompoundButton to redraw the same drawable, but if we set it to null
@@ -52,8 +63,12 @@ public class TopAlignedRadioButton extends AppCompatRadioButton {
         final Drawable background = getBackground();
         if (background != null) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                background.setHotspotBounds(left, top, drawableWidth, bottom);
+                background.setHotspotBounds(left, top, right, bottom);
             }
         }
+    }
+
+    public float convertDpToPx(Context context, float dp) {
+        return dp * context.getResources().getDisplayMetrics().density;
     }
 }
