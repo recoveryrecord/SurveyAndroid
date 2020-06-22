@@ -6,4 +6,5 @@ public interface OnSurveyStateChangedListener {
     void questionsRemoved(int adapterPosition, int itemCount);
     void questionChanged(int adapterPosition);
     void submitButtonInserted(int adapterPosition);
+    boolean scrollBackOneQuestion();
 }

@@ -1,6 +1,7 @@
 package com.recoveryrecord.surveyandroid;
 
 import android.content.Context;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.LinearSmoothScroller;
 import android.support.v7.widget.RecyclerView;
 import android.util.DisplayMetrics;
@@ -123,5 +124,36 @@ public class DefaultOnSurveyStateChangedListener implements OnSurveyStateChanged
             getAdapter().notifyItemChanged(adapterPosition - 1, Boolean.FALSE);
         }
         getAdapter().notifyItemInserted(adapterPosition);
+    }
+
+    /**
+     * This only works if the LayoutManager is a subclass of LinearLayoutManager
+     * @return true if scroll was successful (it will return false if already at the top)
+     */
+    @Override
+    public boolean scrollBackOneQuestion() {
+        if (!(getLayoutManager() instanceof LinearLayoutManager)) {
+            return false;
+        }
+        LinearLayoutManager llm = (LinearLayoutManager) getLayoutManager();
+        int completelyVisiblePosition = llm.findFirstCompletelyVisibleItemPosition();
+        int adapterPosition = completelyVisiblePosition == RecyclerView.NO_POSITION ?
+                    llm.findFirstVisibleItemPosition() - 1 :
+                    completelyVisiblePosition - 1;
+        if (adapterPosition < 0) {
+            return false;
+        }
+        mSmoothScroller.setTargetPosition(adapterPosition);
+        KeyboardUtil.hideKeyboard(getContext(), getRecyclerView());
+        // This ensures that the keyboard finishes hiding before we start scrolling
+        getRecyclerView().post(new Runnable() {
+            @Override
+            public void run() {
+                if (getLayoutManager() != null) {
+                    getLayoutManager().startSmoothScroll(mSmoothScroller);
+                }
+            }
+        });
+        return true;
     }
 }

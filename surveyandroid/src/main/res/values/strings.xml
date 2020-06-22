@@ -3,4 +3,6 @@
     <string name="example_survey">Example Survey</string>
     <string name="please_specify">Please specify</string>
     <string name="next">Next</string>
+    <string name="close_survey">Close Survey?</string>
+    <string name="are_you_sure_you_want_to_close">Are you sure you want to close this survey?</string>
 </resources>

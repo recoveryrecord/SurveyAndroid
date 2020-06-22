@@ -1,6 +1,8 @@
 package com.recoveryrecord.surveyandroid.example;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 
 import com.recoveryrecord.surveyandroid.Answer;
 import com.recoveryrecord.surveyandroid.R;
@@ -49,6 +51,26 @@ public class ExampleSurveyActivity extends SurveyActivity implements CustomCondi
             return Math.abs(birthYear + age - currentYear) > wiggleRoom;
         } else {
             return false;
+        }
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (!getOnSurveyStateChangedListener().scrollBackOneQuestion()) {
+            new AlertDialog.Builder(this)
+                    .setTitle(R.string.close_survey)
+                    .setMessage(R.string.are_you_sure_you_want_to_close)
+                    .setNeutralButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    }).setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    ExampleSurveyActivity.super.onBackPressed();
+                }
+            }).show();
         }
     }
 }
