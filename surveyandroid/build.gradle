@@ -1,10 +1,18 @@
 apply plugin: 'com.android.library'
-apply plugin: 'com.novoda.bintray-release'
+apply plugin: 'com.jfrog.bintray'
+apply plugin: 'maven-publish'
+
+buildscript {
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.8.4'
+    }
+}
 
 android {
     compileSdkVersion 28
-
-
 
     defaultConfig {
         minSdkVersion 15
@@ -21,16 +29,6 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
-    }
-
-}
-
-buildscript {
-    repositories {
-        jcenter()
-    }
-    dependencies {
-        classpath 'com.novoda:bintray-release:0.9.1'
     }
 }
 
@@ -49,15 +47,35 @@ dependencies {
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
 }
 
-publish {
-    userOrg = 'nmullaney'
-    groupId= 'com.recoveryrecord'
-    repoName = 'SurveyAndroid'
-    desc = 'Android Surveys built from declarative definitions (JSON).'
-    website = 'https://github.com/recoveryrecord/SurveyAndroid'
-    licences = ['MIT']
-    // Change to true if you need to re-upload the same version
-    override = true
-    artifactId = "surveyandroid"
-    publishVersion="1.8"
+bintray {
+    user = System.getenv('BINTRAY_USER')
+    key = System.getenv('BINTRAY_KEY')
+    publications = ['release']
+    pkg {
+        version {
+            name = "1.8"
+            released  = new Date()
+            vcsTag = '1.8'
+        }
+        repo = 'SurveyAndroid'
+        name = 'surveyandroid'
+        userOrg = 'nmullaney'
+        licenses = ['MIT']
+        vcsUrl = 'https://github.com/recoveryrecord/SurveyAndroid.git'
+        websiteUrl = 'https://github.com/recoveryrecord/SurveyAndroid'
+        publish = true
+    }
+}
+
+afterEvaluate {
+    publishing {
+        publications {
+            release(MavenPublication) {
+                from components.release
+                groupId = 'com.recoveryrecord'
+                artifactId = 'surveyandroid'
+                version = '1.8'
+            }
+        }
+    }
 }
