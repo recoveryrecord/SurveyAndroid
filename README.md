@@ -15,7 +15,7 @@ Include the following line in your build.gradle dependencies:
   
  ## Features from iOS that are not yet built in Android
   - Support for sub-questions.
-  - Several question types: year picker, date picker, multiple text field, dynamic label test field, add text field, and table select.
+  - Several question types: year picker, date picker, multiple text field, dynamic label test field and table select.
   
   ## Example Survey
 
@@ -228,3 +228,20 @@ The submit object (a peer to `questions`) requires only two keys, `button_title`
 ```
 
 ![](/README/happiness_0.png "segment_select example")
+
+#### add_text_field 
+
+```
+{
+  "id": "which_sports",
+  "question": "Which sports do you like to play?",
+  "question_type": "add_text_field",
+  "input_type": "default",
+  "show_if": {
+     "id": "sports",
+     "operation": "equals",
+     "value": "Yes"
+  }
+}
+```
+
