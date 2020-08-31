@@ -47,6 +47,17 @@
       ]
     },
     {
+      "id": "which_sports",
+      "question": "Which sports do you like to play?",
+      "question_type": "add_text_field",
+      "input_type": "default",
+      "show_if": {
+        "id": "sports",
+        "operation": "equals",
+        "value": "Yes"
+      }
+    },
+    {
       "id": "age",
       "header": "Question 4",
       "question": "What is your current age in years?",

@@ -1,6 +1,74 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    >
 
-</android.support.constraint.ConstraintLayout>
+    <TextView
+        android:id="@+id/header_text"
+        style="@style/Widget.SurveyAndroid.HeaderText"
+        tools:text="Header 1"
+        />
+
+    <LinearLayout style="@style/Widget.SurveyAndroid.QuestionCard">
+
+        <TextView
+            android:id="@+id/question_text"
+            style="@style/Widget.SurveyAndroid.QuestionText"
+            tools:text="Which sports do you like?"
+            />
+
+        <android.support.constraint.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:id="@+id/answer_container"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintEnd_toStartOf="@id/next_button"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                >
+
+                <include layout="@layout/text_input_answer" />
+
+            </LinearLayout>
+
+            <ImageButton
+                android:id="@+id/add_button"
+                android:layout_width="56dp"
+                android:layout_height="56dp"
+                android:layout_marginStart="5dp"
+                android:layout_marginLeft="5dp"
+                android:background="@android:color/transparent"
+                android:src="@drawable/ic_baseline_add_circle_outline_24"
+                app:layout_constraintStart_toStartOf="@id/next_button"
+                app:layout_constraintTop_toTopOf="parent"
+                />
+
+            <Space
+                android:layout_width="1dp"
+                android:layout_height="1dp"
+                app:layout_constraintBottom_toTopOf="@id/next_button"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/add_button" />
+
+            <Button
+                android:id="@+id/next_button"
+                style="@style/Widget.SurveyAndroid.NextButton"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                />
+
+        </android.support.constraint.ConstraintLayout>
+
+    </LinearLayout>
+
+</LinearLayout>
