@@ -1,7 +1,6 @@
 package com.recoveryrecord.surveyandroid.viewholder;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
 import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -12,6 +11,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
 
 import com.recoveryrecord.surveyandroid.Answer;
 import com.recoveryrecord.surveyandroid.QuestionState;

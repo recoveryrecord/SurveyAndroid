@@ -2,7 +2,8 @@ package com.recoveryrecord.surveyandroid.example;
 
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.support.v7.app.AlertDialog;
+
+import androidx.appcompat.app.AlertDialog;
 
 import com.recoveryrecord.surveyandroid.Answer;
 import com.recoveryrecord.surveyandroid.R;

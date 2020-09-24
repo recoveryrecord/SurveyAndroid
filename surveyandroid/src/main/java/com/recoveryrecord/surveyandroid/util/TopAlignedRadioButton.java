@@ -5,8 +5,9 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
-import android.support.v7.widget.AppCompatRadioButton;
 import android.util.AttributeSet;
+
+import androidx.appcompat.widget.AppCompatRadioButton;
 
 public class TopAlignedRadioButton extends AppCompatRadioButton {
 

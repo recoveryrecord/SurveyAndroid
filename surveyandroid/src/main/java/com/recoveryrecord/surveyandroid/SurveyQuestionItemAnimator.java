@@ -1,9 +1,9 @@
 package com.recoveryrecord.surveyandroid;
 
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.RecyclerView;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.RecyclerView;
 
 // Slides new questions in from the right.
 public class SurveyQuestionItemAnimator extends DefaultItemAnimator {

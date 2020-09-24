@@ -20,17 +20,17 @@
             tools:text="What is your favorite ice cream flavor?"
             />
 
-        <android.support.design.widget.TextInputLayout
+        <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/answer_input_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             style="@style/Widget.SurveyAndroid.TextInputLayout">
 
-            <android.support.design.widget.TextInputEditText
+            <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/answer_edit"
                 style="@style/Widget.SurveyAndroid.TextAreaEditText" />
 
-        </android.support.design.widget.TextInputLayout>
+        </com.google.android.material.textfield.TextInputLayout>
 
         <Button
             android:id="@+id/next_button"

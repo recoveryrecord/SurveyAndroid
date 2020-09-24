@@ -1,22 +1,23 @@
 package com.recoveryrecord.surveyandroid.viewholder;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
-import android.support.design.widget.TextInputEditText;
-import android.support.design.widget.TextInputLayout;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
 
+import androidx.annotation.NonNull;
+
+import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
 import com.recoveryrecord.surveyandroid.Answer;
+import com.recoveryrecord.surveyandroid.AnswerProvider;
 import com.recoveryrecord.surveyandroid.QuestionState;
 import com.recoveryrecord.surveyandroid.R;
 import com.recoveryrecord.surveyandroid.question.SingleTextAreaQuestion;
 import com.recoveryrecord.surveyandroid.question.Validation;
 import com.recoveryrecord.surveyandroid.util.KeyboardUtil;
 import com.recoveryrecord.surveyandroid.util.SimpleTextWatcher;
-import com.recoveryrecord.surveyandroid.AnswerProvider;
 import com.recoveryrecord.surveyandroid.validation.ValidationResult;
 import com.recoveryrecord.surveyandroid.validation.Validator;
 

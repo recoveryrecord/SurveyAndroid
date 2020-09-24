@@ -1,6 +1,6 @@
 package com.recoveryrecord.surveyandroid.condition;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 public class SimpleCondition extends Condition {
     public String id;

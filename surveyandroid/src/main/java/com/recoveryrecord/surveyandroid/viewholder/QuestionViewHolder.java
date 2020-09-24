@@ -1,13 +1,13 @@
 package com.recoveryrecord.surveyandroid.viewholder;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
-import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.TextView;
 
-import com.recoveryrecord.surveyandroid.QuestionState;
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.recoveryrecord.surveyandroid.R;
 import com.recoveryrecord.surveyandroid.question.Question;
 

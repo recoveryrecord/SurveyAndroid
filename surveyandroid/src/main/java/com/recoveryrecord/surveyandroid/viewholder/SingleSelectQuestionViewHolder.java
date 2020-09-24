@@ -1,11 +1,9 @@
 package com.recoveryrecord.surveyandroid.viewholder;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
-import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +13,8 @@ import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
 
 import com.recoveryrecord.surveyandroid.Answer;
 import com.recoveryrecord.surveyandroid.QuestionState;

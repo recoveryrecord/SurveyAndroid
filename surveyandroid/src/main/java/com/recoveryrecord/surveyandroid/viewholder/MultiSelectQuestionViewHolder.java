@@ -1,7 +1,6 @@
 package com.recoveryrecord.surveyandroid.viewholder;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
@@ -15,6 +14,8 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
 
 import com.recoveryrecord.surveyandroid.Answer;
 import com.recoveryrecord.surveyandroid.QuestionState;

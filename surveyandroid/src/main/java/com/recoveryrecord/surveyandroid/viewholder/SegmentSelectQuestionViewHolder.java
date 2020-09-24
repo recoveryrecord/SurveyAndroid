@@ -2,8 +2,6 @@ package com.recoveryrecord.surveyandroid.viewholder;
 
 import android.content.Context;
 import android.content.res.Resources;
-import android.support.annotation.AttrRes;
-import android.support.annotation.NonNull;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,6 +9,9 @@ import android.view.ViewGroup;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
+
+import androidx.annotation.AttrRes;
+import androidx.annotation.NonNull;
 
 import com.recoveryrecord.surveyandroid.Answer;
 import com.recoveryrecord.surveyandroid.QuestionState;
