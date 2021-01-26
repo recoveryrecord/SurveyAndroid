@@ -1,5 +1,6 @@
 package com.recoveryrecord.surveyandroid.condition;
 
+import android.text.TextUtils;
 import android.util.Log;
 
 import com.recoveryrecord.surveyandroid.Answer;
@@ -67,6 +68,9 @@ public class ConditionEvaluator {
                 || simpleCondition.operation.equals("greater than or equal to")
                 || simpleCondition.operation.equals("less than")
                 || simpleCondition.operation.equals("less than or equal to")) {
+            if (TextUtils.isEmpty(simpleCondition.value) || TextUtils.isEmpty(answer.getValue())) {
+                return false;
+            }
             try {
                 doubleValue = Double.parseDouble(simpleCondition.value);
                 doubleAnswer = Double.parseDouble(answer.getValue());
