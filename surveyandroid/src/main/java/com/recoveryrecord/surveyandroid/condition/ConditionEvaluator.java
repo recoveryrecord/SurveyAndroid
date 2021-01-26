@@ -42,7 +42,7 @@ public class ConditionEvaluator {
         if (simpleCondition.subid != null && answer != null) {
             answer = answer.getValueMap() == null ? null : answer.getValueMap().get(simpleCondition.subid);
         }
-        // Empty answer reasults depend on the operation
+        // Empty answer results depend on the operation
         if (answer == null) {
             switch (simpleCondition.operation) {
                 case "equals":
@@ -60,34 +60,46 @@ public class ConditionEvaluator {
                     return true;
             }
         }
+
+        Double doubleValue = null;
+        Double doubleAnswer = null;
+        if (simpleCondition.operation.equals("greater than")
+                || simpleCondition.operation.equals("greater than or equal to")
+                || simpleCondition.operation.equals("less than")
+                || simpleCondition.operation.equals("less than or equal to")) {
+            try {
+                doubleValue = Double.parseDouble(simpleCondition.value);
+                doubleAnswer = Double.parseDouble(answer.getValue());
+            } catch (NumberFormatException nfe) {
+                // We don't expect to ever have this error (it would indicate that something's being
+                // compared that's NAN.  So it's faster to catch than to regex check every value.
+                Log.e(TAG, "Parse failure, expected number", nfe);
+                return false;
+            }
+        }
+
         switch (simpleCondition.operation) {
             case "equals":
                 return simpleCondition.value.equals(answer.getValue());
             case "not equals":
                 return !simpleCondition.value.equals(answer.getValue());
-            case "greater than":
-                Double doubleValue = Double.parseDouble(simpleCondition.value);
-                Double doubleAnswer = Double.parseDouble(answer.getValue());
-                return doubleAnswer.compareTo(doubleValue) > 0;
-            case "greater than or equal to":
-                doubleValue = Double.parseDouble(simpleCondition.value);
-                doubleAnswer = Double.parseDouble(answer.getValue());
-                return doubleAnswer.compareTo(doubleValue) >= 0;
-            case "less than":
-                doubleValue = Double.parseDouble(simpleCondition.value);
-                doubleAnswer = Double.parseDouble(answer.getValue());
-                return doubleAnswer.compareTo(doubleValue) < 0;
-            case "less than or equal to":
-                doubleValue = Double.parseDouble(simpleCondition.value);
-                doubleAnswer = Double.parseDouble(answer.getValue());
-                return doubleAnswer.compareTo(doubleValue) <= 0;
             case "contains":
                 return answer.getValueList() != null && answer.getValueList().contains(simpleCondition.value);
             case "not contains":
                 return answer.getValueList() != null && !answer.getValueList().contains(simpleCondition.value);
+            case "greater than":
+                return doubleAnswer.compareTo(doubleValue) > 0;
+            case "greater than or equal to":
+                return doubleAnswer.compareTo(doubleValue) >= 0;
+            case "less than":
+                return doubleAnswer.compareTo(doubleValue) < 0;
+            case "less than or equal to":
+                return doubleAnswer.compareTo(doubleValue) <= 0;
         }
         return false;
     }
+
+
 
     private boolean isConditionMet(DecisionCondition decisionCondition) {
         for (Condition condition : decisionCondition.subconditions) {
