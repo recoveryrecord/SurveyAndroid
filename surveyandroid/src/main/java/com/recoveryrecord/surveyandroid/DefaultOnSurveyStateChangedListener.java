@@ -17,7 +17,6 @@ public class DefaultOnSurveyStateChangedListener implements OnSurveyStateChanged
     private RecyclerView mRecyclerView;
     private LinearSmoothScroller mSmoothScroller;
 
-
     public DefaultOnSurveyStateChangedListener(Context context, RecyclerView recyclerView) {
         mContext = context;
         mRecyclerView = recyclerView;
@@ -66,13 +65,13 @@ public class DefaultOnSurveyStateChangedListener implements OnSurveyStateChanged
             return;
         }
         getAdapter().notifyItemInserted(adapterPosition);
-        mSmoothScroller.setTargetPosition(adapterPosition);
         KeyboardUtil.hideKeyboard(getContext(), getRecyclerView());
         // This ensures that the keyboard finishes hiding before we start scrolling
         getRecyclerView().post(new Runnable() {
             @Override
             public void run() {
                 if (getLayoutManager() != null) {
+                    mSmoothScroller.setTargetPosition(adapterPosition);
                     getLayoutManager().startSmoothScroll(mSmoothScroller);
                 }
             }
@@ -138,19 +137,19 @@ public class DefaultOnSurveyStateChangedListener implements OnSurveyStateChanged
         }
         LinearLayoutManager llm = (LinearLayoutManager) getLayoutManager();
         int completelyVisiblePosition = llm.findFirstCompletelyVisibleItemPosition();
-        int adapterPosition = completelyVisiblePosition == RecyclerView.NO_POSITION ?
+        final int adapterPosition = completelyVisiblePosition == RecyclerView.NO_POSITION ?
                     llm.findFirstVisibleItemPosition() - 1 :
                     completelyVisiblePosition - 1;
         if (adapterPosition < 0) {
             return false;
         }
-        mSmoothScroller.setTargetPosition(adapterPosition);
         KeyboardUtil.hideKeyboard(getContext(), getRecyclerView());
         // This ensures that the keyboard finishes hiding before we start scrolling
         getRecyclerView().post(new Runnable() {
             @Override
             public void run() {
                 if (getLayoutManager() != null) {
+                    mSmoothScroller.setTargetPosition(adapterPosition);
                     getLayoutManager().startSmoothScroll(mSmoothScroller);
                 }
             }
