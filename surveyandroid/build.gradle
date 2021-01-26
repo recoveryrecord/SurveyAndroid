@@ -18,7 +18,7 @@ android {
         minSdkVersion 15
         targetSdkVersion 28
         versionCode 3
-        versionName "2.0"
+        versionName "2.1"
 
         testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
 
@@ -53,9 +53,9 @@ bintray {
     publications = ['release']
     pkg {
         version {
-            name = "2.0"
+            name = "2.1"
             released  = new Date()
-            vcsTag = '2.0'
+            vcsTag = '2.1'
         }
         repo = 'SurveyAndroid'
         name = 'surveyandroid'
@@ -74,7 +74,7 @@ afterEvaluate {
                 from components.release
                 groupId = 'com.recoveryrecord'
                 artifactId = 'surveyandroid'
-                version = '2.0'
+                version = '2.1'
             }
         }
     }
