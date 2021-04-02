@@ -1,6 +1,7 @@
 apply plugin: 'com.android.library'
 apply plugin: 'com.jfrog.bintray'
 apply plugin: 'maven-publish'
+apply plugin: 'com.vanniktech.maven.publish'
 
 buildscript {
     repositories {
@@ -47,35 +48,33 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.0'
 }
 
-bintray {
-    user = System.getenv('BINTRAY_USER')
-    key = System.getenv('BINTRAY_KEY')
-    publications = ['release']
-    pkg {
-        version {
-            name = "2.1"
-            released  = new Date()
-            vcsTag = '2.1'
-        }
-        repo = 'SurveyAndroid'
-        name = 'surveyandroid'
-        userOrg = 'nmullaney'
-        licenses = ['MIT']
-        vcsUrl = 'https://github.com/recoveryrecord/SurveyAndroid.git'
-        websiteUrl = 'https://github.com/recoveryrecord/SurveyAndroid'
-        publish = true
-    }
+ext {
+    RELEASE_REPOSITORY_URL = "https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/"
+    SNAPSHOT_REPOSITORY_URL = "https://s01.oss.sonatype.org/content/repositories/snapshots/"
 }
 
 afterEvaluate {
     publishing {
-        publications {
-            release(MavenPublication) {
-                from components.release
-                groupId = 'com.recoveryrecord'
-                artifactId = 'surveyandroid'
-                version = '2.1'
+        repositories {
+            maven {
+                def releasesRepoUrl = "https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/"
+                def snapshotsRepoUrl = "https://s01.oss.sonatype.org/content/repositories/snapshots/"
+                url = version.endsWith('SNAPSHOT') ? snapshotsRepoUrl : releasesRepoUrl
+                name = "mavenCentral"
+                credentials {
+                    username = mavenCentralRepositoryUsername
+                    password = mavenCentralRepositoryPassword
+                }
             }
         }
+    }
+}
+
+
+mavenPublish {
+    nexus {
+        baseUrl = "https://s01.oss.sonatype.org/service/local/"
+        repositoryUsername = mavenCentralRepositoryUsername
+        repositoryPassword = mavenCentralRepositoryPassword
     }
 }
