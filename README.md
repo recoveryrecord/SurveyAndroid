@@ -4,7 +4,9 @@ Android Surveys built from declarative definitions (JSON). Many question types, 
 ## Install
 Include the following line in your build.gradle dependencies:
 
-`implementation 'com.recoveryrecord:surveyandroid:1.0'`
+`implementation 'com.recoveryrecord:surveyandroid:2.1'`
+
+SurveyAndroid is now available from the mavenCentral respository for versions 2.1+.  Previous versions will be available from jCenter() until Bintray is sunset on May 1, 2021.
 
 ## Features
 
