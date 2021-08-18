@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
     <item>
-        <shape android:shape="rectangle" android:color="?colorPrimary">
-            <solid android:color="?colorPrimary" />
+        <shape android:shape="rectangle" android:color="@color/colorPrimary">
+            <solid android:color="@color/colorPrimary" />
             <corners
                 android:topRightRadius="@dimen/segment_radio_button_radius"
                 android:bottomRightRadius="@dimen/segment_radio_button_radius"

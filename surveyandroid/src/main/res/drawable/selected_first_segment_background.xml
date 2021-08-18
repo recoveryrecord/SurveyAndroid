@@ -2,7 +2,7 @@
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
     <item>
         <shape android:shape="rectangle">
-            <solid android:color="?colorPrimary" />
+            <solid android:color="@color/colorPrimary" />
             <corners
                 android:topLeftRadius="@dimen/segment_radio_button_radius"
                 android:bottomLeftRadius="@dimen/segment_radio_button_radius" />
