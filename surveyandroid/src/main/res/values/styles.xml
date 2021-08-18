@@ -6,6 +6,9 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+        <item name="primaryBackgroundColor">@color/primaryBackgroundColor</item>
+        <item name="primaryTextColor">@color/primaryTextColor</item>
+        <item name="recyclerViewBackgroundColor">@color/recyclerViewBackgroundColor</item>
         <item name="firstSegmentBackground">@drawable/first_segment_background</item>
         <item name="middleSegmentBackground">@drawable/middle_segment_background</item>
         <item name="lastSegmentBackground">@drawable/last_segment_background</item>
@@ -15,7 +18,7 @@
     </style>
 
     <style name="Widget.SurveyAndroid.RecyclerView">
-        <item name="background">@color/lighter_gray</item>
+        <item name="background">?recyclerViewBackgroundColor</item>
     </style>
 
     <style name="Widget.SurveyAndroid.HeaderText">
@@ -29,7 +32,7 @@
     <style name="Widget.SurveyAndroid.QuestionCard">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:background">@android:color/white</item>
+        <item name="android:background">?primaryBackgroundColor</item>
         <item name="android:orientation">vertical</item>
         <item name="android:padding">?paddingSmall</item>
     </style>
@@ -37,12 +40,12 @@
     <style name="Widget.SurveyAndroid.QuestionText">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:textColor">@android:color/black</item>
+        <item name="android:textColor">?primaryTextColor</item>
         <item name="android:paddingTop">?paddingLarge</item>
         <item name="android:paddingBottom">?paddingLarge</item>
     </style>
 
-    <style name="Widget.SurveyAndroid.NextButton" parent="Base.Widget.AppCompat.Button.Borderless">
+    <style name="Widget.SurveyAndroid.NextButton" parent="Widget.MaterialComponents.Button.TextButton">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_gravity">center_vertical|end</item>
@@ -75,7 +78,7 @@
         <item name="android:paddingTop">?paddingSmall</item>
     </style>
 
-    <style name="Widget.SurveyAndroid.SegmentedRadioButton" parent="Widget.AppCompat.CompoundButton.RadioButton">
+    <style name="Widget.SurveyAndroid.SegmentedRadioButton" parent="Widget.MaterialComponents.CompoundButton.RadioButton">
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_width">0dp</item>
         <item name="android:layout_weight">1</item>
@@ -91,7 +94,7 @@
     </style>
 
     <style name="Widget.SurveyAndroid.SegmentTag">
-        <item name="android:textColor">@color/gray_text_color</item>
+        <item name="android:textColor">?segmentTextColor</item>
     </style>
 
     <style name="Widget.SurveyAndroid.SubmitSpacer">
@@ -99,7 +102,7 @@
         <item name="android:layout_width">match_parent</item>
     </style>
 
-    <style name="Widget.SurveyAndroid.SubmitButton" parent="Base.Widget.AppCompat.Button.Borderless">
+    <style name="Widget.SurveyAndroid.SubmitButton" parent="Widget.MaterialComponents.Button.TextButton">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
     </style>

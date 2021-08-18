@@ -49,6 +49,7 @@
                 android:layout_marginLeft="5dp"
                 android:background="@android:color/transparent"
                 android:src="@drawable/ic_baseline_add_circle_outline_24"
+                app:tint="?colorPrimary"
                 app:layout_constraintStart_toStartOf="@id/next_button"
                 app:layout_constraintTop_toTopOf="parent"
                 />

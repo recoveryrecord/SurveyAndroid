@@ -3,6 +3,11 @@
     <color name="colorPrimary">#008577</color>
     <color name="colorPrimaryDark">#00574B</color>
     <color name="colorAccent">#D81B60</color>
+    <color name="primaryBackgroundColor">@android:color/white</color>
+    <color name="primaryTextColor">@android:color/black</color>
+    <color name="recyclerViewBackgroundColor">@color/lighter_gray</color>
+
     <color name="lighter_gray">#80D3D3D3</color>
     <color name="gray_text_color">#686868</color>
+    <color name="darker_gray">#800E0E0E</color>
 </resources>

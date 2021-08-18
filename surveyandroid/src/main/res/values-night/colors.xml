@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="primaryBackgroundColor">@android:color/black</color>
+    <color name="primaryTextColor">@android:color/white</color>
+    <color name="recyclerViewBackgroundColor">@color/darker_gray</color>
+</resources>
