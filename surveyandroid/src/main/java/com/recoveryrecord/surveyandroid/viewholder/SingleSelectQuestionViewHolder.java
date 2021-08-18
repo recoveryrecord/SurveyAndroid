@@ -56,6 +56,9 @@ public class SingleSelectQuestionViewHolder extends QuestionViewHolder<SingleSel
         for (Option option : question.options) {
             final RadioButton radioButton = new TopAlignedRadioButton(getContext());
             radioButton.setText(option.title);
+            radioButton.setMinimumHeight(0);
+            int topBottomPadding = (int)convertDpToPx(getContext(), 5);
+            radioButton.setPadding(0, topBottomPadding, 0, topBottomPadding);
             if (option instanceof OtherOption) {
                 radioButton.setTag(R.id.is_other, Boolean.TRUE);
                 radioButton.setTag(R.id.input_type_number, ((OtherOption) option).type.equals("number"));

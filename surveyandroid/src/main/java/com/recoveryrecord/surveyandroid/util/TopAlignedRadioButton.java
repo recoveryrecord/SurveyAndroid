@@ -40,10 +40,12 @@ public class TopAlignedRadioButton extends AppCompatRadioButton {
         final int drawableHeight = buttonDrawable.getIntrinsicHeight();
         final int drawableWidth = buttonDrawable.getIntrinsicWidth();
 
-        int top = 0;
+        int top = getPaddingTop();
 
         if (getLineCount() > 1) {
-            top = (int)convertDpToPx(getContext(), MULTI_LINE_DRAWABLE_VERTICAL_CORRECTION_DP);
+            top = top + (int)convertDpToPx(getContext(), MULTI_LINE_DRAWABLE_VERTICAL_CORRECTION_DP);
+        } else {
+            top = 0;
         }
 
         int bottom = top + drawableHeight;
