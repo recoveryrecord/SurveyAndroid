@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RadioButton xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+<RadioButton xmlns:tools="http://schemas.android.com/tools"
     tools:text="10"
-    tools:background="@drawable/first_segment_background"
+    tools:background="?firstSegmentBackground"
     style="@style/Widget.SurveyAndroid.SegmentedRadioButton" />
