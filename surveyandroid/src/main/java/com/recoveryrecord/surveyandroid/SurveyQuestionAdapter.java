@@ -2,6 +2,7 @@ package com.recoveryrecord.surveyandroid;
 
 import android.content.Context;
 import android.util.Log;
+import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -81,7 +82,7 @@ public class SurveyQuestionAdapter extends RecyclerView.Adapter<RecyclerView.Vie
     }
 
     public SurveyQuestionAdapter(Context context, SurveyState state) {
-        mContext = context;
+        mContext = new ContextThemeWrapper(context, R.style.Widget_SurveyAndroid);
         mState = state;
     }
 
