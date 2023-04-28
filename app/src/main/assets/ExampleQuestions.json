@@ -1,6 +1,17 @@
 {
   "questions": [
     {
+      "id": "date",
+      "header": "Question 16",
+      "question": "What is was the best day of the last year?",
+      "question_type": "date_picker",
+      "date": "current_date",
+      "max_date": "current_date",
+      "date_diff": {
+        "year": -1
+      }
+    },
+    {
       "id": "ice_cream",
       "header": "Question 1",
       "question": "What is your favorite ice cream flavor?",
