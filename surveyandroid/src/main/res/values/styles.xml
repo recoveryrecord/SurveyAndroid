@@ -58,6 +58,12 @@
         <item name="android:orientation">vertical</item>
     </style>
 
+    <style name="Widget.SurveyAndroid.DateContainer">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:orientation">vertical</item>
+    </style>
+
     <style name="Widget.SurveyAndroid.TextInputLayout" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
         <item name="android:hint">@string/please_specify</item>
         <item name="hintAnimationEnabled">true</item>
