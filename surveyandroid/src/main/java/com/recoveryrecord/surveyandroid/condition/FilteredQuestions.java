@@ -60,7 +60,7 @@ public class FilteredQuestions implements OnQuestionStateChangedListener {
         for (int i = 0; i < mSurveyQuestions.size(); i++) {
             Question question = mSurveyQuestions.getQuestionFor(i);
             if (isSkipped(question)) {
-                QuestionAdapterPosition skippedInfo = new QuestionAdapterPosition(question.id, mAdapterToRealPositions.size());
+                QuestionAdapterPosition skippedInfo = new QuestionAdapterPosition(question.id, i);
                 skippedQuestions.add(skippedInfo);
                 if (!oldSkippedQuestions.contains(skippedInfo)) {
                     newlySkipped.add(skippedInfo);
